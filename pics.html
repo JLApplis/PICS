@@ -833,6 +833,10 @@ a:hover { text-decoration: underline; }
           <label>Adresse</label>
           <input type="text" id="p-adresse" placeholder="Adresse">
         </div>
+        <div class="form-group">
+          <label>Email du syndic (mis en copie des mails)</label>
+          <input type="text" id="p-email-syndic" placeholder="Ex : contact@monsyndic.fr">
+        </div>
         <div id="db-taille-info" style="margin-top:16px;font-size:12px;color:var(--texte-sec)">DB locale : —</div>
       </div>
       <!-- Onglet Signatures -->
@@ -1669,9 +1673,7 @@ window.resetData = function() {
     function() {
       DB = JSON.parse(JSON.stringify(DB_DEFAUT));
       sauverDB();
-      window.closeModal('data');
-      renderDashboard();
-      updateHeaderCopro();
+      location.reload();
     }
   );
 };
@@ -1685,6 +1687,7 @@ window.initParams = function() {
   document.getElementById('p-nom').value      = p.nom      || '';
   document.getElementById('p-fonction').value = p.fonction || '';
   document.getElementById('p-adresse').value  = p.adresse  || '';
+  document.getElementById('p-email-syndic').value = p.emailSyndic || '';
   renderSignatures();
   renderListeEditor();
   // Indicateur taille localStorage
@@ -1711,7 +1714,8 @@ window.saveParams = function() {
     copro:    document.getElementById('p-copro').value.trim(),
     nom:      document.getElementById('p-nom').value.trim(),
     fonction: document.getElementById('p-fonction').value.trim(),
-    adresse:  document.getElementById('p-adresse').value.trim()
+    adresse:  document.getElementById('p-adresse').value.trim(),
+    emailSyndic: document.getElementById('p-email-syndic').value.trim()
   };
   sauverDB();
   updateHeaderCopro();
@@ -2557,7 +2561,7 @@ window.renderLiensAction = function() {
              style="border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px;
                     color:${lien.url?'var(--vert-fonce)':'inherit'};font-weight:${lien.url?'600':'400'}"
              onfocus="(function(el){el.value=el.getAttribute('data-url');})(this)"
-             onblur="(function(el,idx){var v=el.value.trim();window._actionLiensSetUrl(idx,v);el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
+             onblur="(function(el,idx){var v=window.nettoyerLien(el.value);window._actionLiensSetUrl(idx,v);el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
       <button class="btn btn-primary btn-sm" title="Ouvrir le document"
               onclick="(function(){if(_actionLiens[${idx}].url)window.open(_actionLiens[${idx}].url,'_blank')})()">🔗 Ouvrir</button>
       <button class="btn btn-rouge btn-sm btn-icon" title="Supprimer"
@@ -2566,6 +2570,9 @@ window.renderLiensAction = function() {
   `).join('');
 };
 
+window.nettoyerLien = function(v) {
+  return (v || '').trim().replace(/^["']+|["']+$/g, '').trim();
+};
 window._actionLiensSetLabel = function(idx, v) { if (_actionLiens[idx]) _actionLiens[idx].label = v; };
 window._actionLiensSetUrl   = function(idx, v) { if (_actionLiens[idx]) _actionLiens[idx].url   = v; };
 
@@ -4916,7 +4923,7 @@ window.renderLiensNC = function() {
              style="border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px;
                     color:${lien.url?'var(--vert-fonce)':'inherit'};font-weight:${lien.url?'600':'400'}"
              onfocus="(function(el){el.value=el.getAttribute('data-url');})(this)"
-             onblur="(function(el,idx){var v=el.value.trim();_ncLiens[idx].url=v;el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
+             onblur="(function(el,idx){var v=window.nettoyerLien(el.value);_ncLiens[idx].url=v;el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
       <button class="btn btn-primary btn-sm"
               onclick="(function(){if(_ncLiens[${idx}].url)window.open(_ncLiens[${idx}].url,'_blank')})()">🔗 Ouvrir</button>
       <button class="btn btn-rouge btn-sm btn-icon"
@@ -4950,7 +4957,7 @@ window.renderLiensReunion = function() {
              style="border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px;
                     color:${lien.url?'var(--vert-fonce)':'inherit'};font-weight:${lien.url?'600':'400'}"
              onfocus="(function(el){el.value=el.getAttribute('data-url');})(this)"
-             onblur="(function(el,idx){var v=el.value.trim();if(_reunionLiens[idx])_reunionLiens[idx].url=v;el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
+             onblur="(function(el,idx){var v=window.nettoyerLien(el.value);if(_reunionLiens[idx])_reunionLiens[idx].url=v;el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
       <button class="btn btn-primary btn-sm" title="Ouvrir le document"
               onclick="(function(){if(_reunionLiens[${idx}]&&_reunionLiens[${idx}].url)window.open(_reunionLiens[${idx}].url,'_blank')})()">🔗 Ouvrir</button>
       <button class="btn btn-rouge btn-sm btn-icon" title="Supprimer"
@@ -5274,7 +5281,7 @@ window.notifierPresta = function(ncId) {
     (sig.nom||'') + (sig.fonction ? '\n' + sig.fonction : '') + (sig.adresse ? '\n' + sig.adresse : '')
   ].filter(l => l !== null).join('\n'));
   const lnk = document.createElement('a');
-  lnk.href = 'mailto:' + emails + '?cc=' + encodeURIComponent('') + '&subject=' + sujet + '&body=' + corps;
+  lnk.href = 'mailto:' + emails + '?cc=' + encodeURIComponent((window.DB.params && window.DB.params.emailSyndic) || '') + '&subject=' + sujet + '&body=' + corps;
   lnk.target = '_blank';
   document.body.appendChild(lnk); lnk.click(); document.body.removeChild(lnk);
 
@@ -5982,7 +5989,7 @@ window.renderLiensDoc = function() {
              style="border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px;
                     color:${lien.url?'var(--vert-fonce)':'inherit'};font-weight:${lien.url?'600':'400'}"
              onfocus="(function(el){el.value=el.getAttribute('data-url');})(this)"
-             onblur="(function(el,idx){var v=el.value.trim();_docLiens[idx].url=v;el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
+             onblur="(function(el,idx){var v=window.nettoyerLien(el.value);_docLiens[idx].url=v;el.setAttribute('data-url',v);el.value=v?'✅ Lien enregistré':'';})(this,${idx})">
       <button class="btn btn-ghost btn-sm btn-icon" title="Monter" style="padding:4px 7px"
               onclick="(function(){if(${idx}>0){var t=_docLiens.splice(${idx},1)[0];_docLiens.splice(${idx}-1,0,t);window.renderLiensDoc();}})()">▲</button>
       <button class="btn btn-ghost btn-sm btn-icon" title="Descendre" style="padding:4px 7px"
@@ -6285,18 +6292,7 @@ window.saveNC = function(action) {
           <label style="color:var(--bleu);margin:0">📎 Pièces jointes</label>
           <button class="btn btn-primary btn-sm ml-auto" onclick="window.ajouterLienDoc()">＋ Ajouter un lien</button>
         </div>
-        <div id="doc-liens-list" style="display:flex;flex-direction:column;gap:6px">
-    <div style="display:grid;grid-template-columns:2fr 1fr auto auto auto auto;gap:6px;align-items:center;
-                background:var(--bleu-clair);border:1px solid var(--bleu);border-radius:var(--radius-sm);padding:6px 10px">
-      <input type="text" value="" placeholder="Libellé" style="border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px" oninput="(function(v){_docLiens[0].label=v})(this.value)">
-      <input type="text" value="" data-url="" placeholder="Coller l&#39;URL ici…" style="border:1px solid var(--border);border-radius:4px;padding:4px 8px;font-size:12px;
-                    color:inherit;font-weight:400" onfocus="(function(el){el.value=el.getAttribute(&#39;data-url&#39;);})(this)" onblur="(function(el,idx){var v=el.value.trim();_docLiens[idx].url=v;el.setAttribute(&#39;data-url&#39;,v);el.value=v?&#39;✅ Lien enregistré&#39;:&#39;&#39;;})(this,0)">
-      <button class="btn btn-ghost btn-sm btn-icon" title="Monter" style="padding:4px 7px" onclick="(function(){if(0&gt;0){var t=_docLiens.splice(0,1)[0];_docLiens.splice(0-1,0,t);window.renderLiensDoc();}})()">▲</button>
-      <button class="btn btn-ghost btn-sm btn-icon" title="Descendre" style="padding:4px 7px" onclick="(function(){if(0&lt;_docLiens.length-1){var t=_docLiens.splice(0,1)[0];_docLiens.splice(0+1,0,t);window.renderLiensDoc();}})()">▼</button>
-      <button class="btn btn-primary btn-sm" onclick="(function(){if(_docLiens[0].url)window.open(_docLiens[0].url,&#39;_blank&#39;)})()">🔗 Ouvrir</button>
-      <button class="btn btn-rouge btn-sm btn-icon" onclick="(function(){_docLiens.splice(0,1);window.renderLiensDoc();})()">✕</button>
-    </div>
-  </div>
+        <div id="doc-liens-list" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
 
     </div><!-- /modal-body -->
@@ -7345,7 +7341,7 @@ window.envoyerNotifContacts = function() {
 
   // Ouvrir le client mail
   const lnk = document.createElement('a');
-  lnk.href = 'mailto:' + emails + '?cc=' + encodeURIComponent('') + '&subject=' + sujet + '&body=' + corps;
+  lnk.href = 'mailto:' + emails + '?cc=' + encodeURIComponent((window.DB.params && window.DB.params.emailSyndic) || '') + '&subject=' + sujet + '&body=' + corps;
   lnk.target = '_blank';
   document.body.appendChild(lnk); lnk.click(); document.body.removeChild(lnk);
 };
