@@ -35,10 +35,10 @@ rendus...) depuis ses fiches. Pour que cela fonctionne :
    `pics.html`, et placez-y vos fichiers.
 2. Dans l'Explorateur Windows, faites un clic droit sur le fichier à
    lier → **« Copier en tant que chemin d'accès »**.
-3. Collez ce chemin dans le champ prévu de la fiche PICS, en
-   **supprimant les guillemets** au début et à la fin.
+3. Collez ce chemin dans le champ prévu de la fiche PICS. Les
+   guillemets ajoutés par Windows sont retirés automatiquement.
 
-Exemple : `"C:\PICS\DOCUMENTS\contrat.pdf"` devient
+Exemple : `"C:\PICS\DOCUMENTS\contrat.pdf"` est enregistré comme
 `C:\PICS\DOCUMENTS\contrat.pdf`
 
 ## Vos données
