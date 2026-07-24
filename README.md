@@ -63,11 +63,18 @@ Les modules avancés (Non-conformités, Documents) sont masqués au premier lanc
 2. **Double-cliquez** sur le fichier : il s'ouvre dans votre navigateur (Chrome, Edge, Firefox, Safari).
 3. **Commencez à saisir.** Le guide intégré (bouton ❓) vous accompagne.
 
-> 💡 Pour garder le fichier à portée de main, placez-le dans un dossier dédié et créez un raccourci. Pensez à créer à côté un sous-dossier `DOCUMENTS` si vous voulez lier vos contrats et devis depuis les fiches.
+> 💡 Pour garder le fichier à portée de main, placez-le dans un dossier dédié et créez un raccourci.
 
-## Essayer sans rien télécharger
+## Lier vos documents (contrats, devis, factures)
 
-La **[démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** ouvre PICS avec des données fictives (la « Résidence les Acacias ») : vous pouvez tout explorer, modifier, ajouter, sans risque. Rien n'est enregistré durablement, et l'export ainsi que le contrôle de gestion CSV y sont désactivés — ce sont des fonctions de la version complète.
+PICS n'enregistre pas vos fichiers : il conserve un **lien** vers leur emplacement sur votre ordinateur. Pour que ces liens restent valables dans le temps, un peu de méthode s'impose.
+
+1. À côté de `pics.html`, créez un dossier dédié — par exemple `DOCUMENTS` — et rangez-y vos contrats, devis et factures.
+2. Dans une fiche PICS, cliquez sur **＋ Ajouter un lien**. Pour renseigner le chemin du fichier : dans l'explorateur Windows, faites un **clic droit sur le fichier → Copier en tant que chemin d'accès**, puis collez ce chemin dans le champ.
+
+> ⚠️ **Point essentiel : une fois les liens créés, ne déplacez plus ce dossier et ne le renommez pas.** Chaque lien pointe vers un emplacement précis ; si le dossier `DOCUMENTS` change de nom ou de place dans l'arborescence, **tous les liens deviennent invalides**. Gardez `pics.html` et son dossier `DOCUMENTS` au même endroit — si vous devez tout déplacer, déplacez-les d'un seul bloc, ensemble.
+
+> 💡 Selon votre navigateur et ses réglages de sécurité, l'ouverture d'un fichier local depuis un lien peut être bloquée. Dans ce cas, copiez le chemin affiché et collez-le dans la barre d'adresse d'un nouvel onglet.
 
 ## Compatibilité
 
