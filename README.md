@@ -7,7 +7,7 @@
 **Un outil libre et gratuit pour les conseils syndicaux bénévoles.**
 Suivez vos réunions, actions, prestataires, documents — et contrôlez les comptes de votre syndic.
 
-**[▶️ Essayer la démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** &nbsp;•&nbsp; **[⬇️ Télécharger PICS](https://github.com/JLApplis/PICS/releases/latest)**
+**[▶️ Essayer la démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** &nbsp;•&nbsp; **[⬇️ Télécharger PICS](https://github.com/JLApplis/PICS/releases/latest/download/pics.html)**
 
 *Aucune installation • Aucun compte • Aucun serveur • Vos données restent chez vous*
 
@@ -59,7 +59,7 @@ Les modules avancés (Non-conformités, Documents) sont masqués au premier lanc
 
 ## Démarrer en 3 étapes
 
-1. **[Téléchargez `pics.html`](https://github.com/JLApplis/PICS/releases/latest)** (bouton *Download* de la dernière version).
+1. **[Téléchargez `pics.html`](https://github.com/JLApplis/PICS/releases/latest/download/pics.html)** (bouton *Download* de la dernière version).
 2. **Double-cliquez** sur le fichier : il s'ouvre dans votre navigateur (Chrome, Edge, Firefox, Safari).
 3. **Commencez à saisir.** Le guide intégré (bouton ❓) vous accompagne.
 
