@@ -19,7 +19,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PICS</title>
+<title>PICS V2</title>
 <style>
 /* ===== VARIABLES ===== */
 :root {
@@ -405,7 +405,36 @@ a:hover { text-decoration: underline; }
 .kpi-sub   { font-size: 11px; color: var(--texte-sec); margin-top: 4px; }
 
 /* ===== ALERTES ===== */
+
+/* ===== Mode simple (Autres modules masqués) ===== */
+body.mode-simple .avance-only { display: none !important; }
+body.mode-simple #dash-kpi > .kpi-card:nth-child(4),
+body.mode-simple #dash-kpi > .kpi-card:nth-child(6) { display: none; }
+body.mode-simple #a-ligne-liens { grid-template-columns: 1fr 1fr 140px !important; }
+body.mode-simple #module-prestataires .liste-header > span:nth-child(9),
+body.mode-simple #module-prestataires .liste-header > span:nth-child(11),
+body.mode-simple #module-prestataires .liste-row > span:nth-child(9),
+body.mode-simple #module-prestataires .liste-row > span:nth-child(11) { display: none; }
+body.mode-simple #module-prestataires .liste-header,
+body.mode-simple #module-prestataires .liste-row {
+  grid-template-columns: 36px 52px 30px 1fr 80px 140px 1fr 90px 80px 70px !important;
+}
 .alerte-section { margin-bottom: 20px; }
+#rapprochement-body table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+#rapprochement-body th { background: #085041; color: #fff; padding: 6px 9px; text-align: left;
+  font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+#rapprochement-body td { padding: 6px 9px; border-bottom: 1px solid #eee; vertical-align: top; }
+#rapprochement-body tr:nth-child(even) td { background: #f9f9f7; }
+#budget-body table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+#budget-body th { background: #085041; color: #fff; padding: 6px 9px; text-align: left;
+  font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+#budget-body td { padding: 6px 9px; border-bottom: 1px solid #eee; vertical-align: top; }
+#budget-body tr:nth-child(even) td { background: #f9f9f7; }
+#contrats-body table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+#contrats-body th { background: #085041; color: #fff; padding: 6px 9px; text-align: left;
+  font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+#contrats-body td { padding: 6px 9px; border-bottom: 1px solid #eee; vertical-align: top; }
+#contrats-body tr:nth-child(even) td { background: #f9f9f7; }
 .alerte-title {
   font-size: 13px;
   font-weight: 700;
@@ -494,7 +523,7 @@ a:hover { text-decoration: underline; }
 
 <!-- ===== HEADER ===== -->
 <div id="header">
-  <div class="logo">🌿 PICS</div>
+  <div class="logo">🌿 PICS V2</div>
   <div class="tagline" id="header-copro">Piloter votre copropriété avec méthode et simplicité</div>
   <div class="btns">
     <button onclick="window.openModal(&#39;params&#39;)">⚙️ Paramètres</button>
@@ -505,6 +534,15 @@ a:hover { text-decoration: underline; }
 </div>
 
 <!-- ===== NAV ===== -->
+<div id="bandeau-export" style="display:none;background:#FFF8E1;border-bottom:1px solid #E0C040;
+     padding:7px 16px;font-size:12.5px;color:#6b5900;align-items:center;gap:10px">
+  <span>💾</span>
+  <span id="bandeau-export-msg" style="flex:1"></span>
+  <button class="btn btn-vert btn-sm" onclick="window.exportDataHorodate()">⬇️ Exporter maintenant</button>
+  <button class="btn btn-ghost btn-sm" title="Me le rappeler dans 7 jours"
+          onclick="localStorage.setItem('pics_rappel_export_report', new Date(Date.now()+7*86400000).toISOString().slice(0,10));window.majRappelExport()">✕</button>
+</div>
+
 <div id="nav">
   <button class="nav-btn active" data-mod="dashboard" onclick="window.showModule(&#39;dashboard&#39;,this);window.renderDashboard();var t=document.getElementById(&#39;filter-actions-type&#39;);if(t)t.value=&#39;&#39;">
     <span class="icon">📊</span>Tableau de bord
@@ -515,16 +553,26 @@ a:hover { text-decoration: underline; }
   <button class="nav-btn mod-actions" data-mod="actions" onclick="_filtrePrestaActions=null;window.showModule(&#39;actions&#39;,this)">
     <span class="icon">🎯</span>Actions
   </button>
-  <button class="nav-btn mod-nc" data-mod="nonconformites" onclick="window.showModule(&#39;nonconformites&#39;,this)">
+  <button class="nav-btn mod-nc avance-only" data-mod="nonconformites" onclick="window.showModule(&#39;nonconformites&#39;,this)">
     <span class="icon">🔧</span>Non-conformités
   </button>
   <button class="nav-btn mod-prestataires" data-mod="prestataires" onclick="window.showModule(&#39;prestataires&#39;,this)">
     <span class="icon">🏢</span>Prestataires
   </button>
-  <button class="nav-btn mod-documents" data-mod="documents" onclick="window.showModule(&#39;documents&#39;,this)">
+  <button class="nav-btn mod-documents avance-only" data-mod="documents" onclick="window.showModule(&#39;documents&#39;,this)">
     <span class="icon">📁</span>Documents
   </button>
+  <button class="nav-btn" id="btn-autres-modules" onclick="window.toggleModulesAvances()"
+          title="Afficher ou masquer les modules Non-conformités et Documents">
+    <span class="icon">⋯</span><span>Autres modules</span>
+  </button>
   <div style="flex:1"></div>
+  <button class="nav-btn" onclick="window.ouvrirRecherche()" title="Rechercher partout dans PICS">
+    <span class="icon">🔍</span>Rechercher
+  </button>
+  <button class="nav-btn" onclick="window.ouvrirGuide()" style="color:var(--vert-fonce);font-weight:600">
+    <span class="icon">❓</span>Guide
+  </button>
 </div>
 
 <!-- ===== MAIN ===== -->
@@ -532,7 +580,7 @@ a:hover { text-decoration: underline; }
 
   <!-- MODULE DASHBOARD -->
   <div id="module-dashboard" class="module active">
-    <div class="section-title">📊 Tableau de bord</div>
+    <div class="section-title">📊 Tableau de bord<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('dashboard')" title="Aide sur ce module">❓</button></div>
     <div id="dash-kpi" class="kpi-grid">
     <div class="kpi-card kpi-bleu" style="cursor:pointer" onclick="(function(){var b=document.querySelector(&#39;[data-mod=reunions]&#39;);window.showModule(&#39;reunions&#39;,b);var s=document.getElementById(&#39;filter-reunions-statut&#39;);if(s){s.value=&#39;Tenue&#39;;window.renderReunions();}})()">
       <div class="kpi-val" style="color:var(--bleu)">0</div>
@@ -574,7 +622,7 @@ a:hover { text-decoration: underline; }
 
   <!-- MODULE RÉUNIONS (placeholder) -->
   <div id="module-reunions" class="module">
-    <div class="section-title" style="color:var(--bleu)">📅 Réunions</div>
+    <div class="section-title" style="color:var(--bleu)">📅 Réunions<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('reunions')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-reunions" placeholder="🔍 Titre…" oninput="window.renderReunions()">
@@ -600,7 +648,7 @@ a:hover { text-decoration: underline; }
 
   <!-- MODULE ACTIONS (placeholder) -->
   <div id="module-actions" class="module">
-    <div class="section-title" style="color:var(--vert-fonce)">🎯 Actions</div>
+    <div class="section-title" style="color:var(--vert-fonce)">🎯 Actions<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('actions')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-actions" placeholder="🔍 Objet, responsable…" oninput="_filtrePrestaActions=null;window.renderActions()">
@@ -644,7 +692,7 @@ a:hover { text-decoration: underline; }
 
   <!-- MODULE NON-CONFORMITÉS (placeholder) -->
   <div id="module-nonconformites" class="module">
-    <div class="section-title" style="color:var(--rouge)">🔧 Non-conformités</div>
+    <div class="section-title" style="color:var(--rouge)">🔧 Non-conformités<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('nonconformites')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-nc" placeholder="🔍 Description…" oninput="window._filtrePrestaNC=null;window.renderNC()">
@@ -686,7 +734,7 @@ a:hover { text-decoration: underline; }
 
   <!-- MODULE PRESTATAIRES (placeholder) -->
   <div id="module-prestataires" class="module">
-    <div class="section-title" style="color:var(--orange)">🏢 Prestataires</div>
+    <div class="section-title" style="color:var(--orange)">🏢 Prestataires<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('prestataires')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-presta" placeholder="🔍 Activités…" oninput="window.renderPrestataires()">
@@ -723,7 +771,7 @@ a:hover { text-decoration: underline; }
 
   <!-- MODULE DOCUMENTS (placeholder) -->
   <div id="module-documents" class="module">
-    <div class="section-title" style="color:var(--ardoise)">📁 Documents</div>
+    <div class="section-title" style="color:var(--ardoise)">📁 Documents<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('documents')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-docs" placeholder="🔍 Titre, prestataire…" oninput="window._filtreActionDocs=null;window.renderDocuments()">
@@ -790,6 +838,13 @@ a:hover { text-decoration: underline; }
       <div style="display:flex;flex-direction:column;gap:10px">
         <button class="btn btn-vert" onclick="window.exportDataHorodate()">⬇️ Exporter horodaté (JSON)</button>
         <button class="btn btn-primary" onclick="document.getElementById(&#39;importFile&#39;).click()">⬆️ Importer des données (JSON)</button>
+        <button class="btn btn-bleu" onclick="document.getElementById('csvDepensesFile').click()" title="Fichier attendu : depenses_en_cours.csv">💶 Rapprocher les dépenses<br><span style="font-size:10px;font-weight:400;opacity:0.85">depenses_en_cours.csv</span></button>
+        <input type="file" id="csvDepensesFile" accept=".csv,text/csv,.txt" style="display:none" onchange="window.rapprocherCSVDepenses(event)">
+        <button class="btn btn-bleu" onclick="document.getElementById('budgetFile').click()" title="Fichier attendu : comparatif_budget_realise.csv">📊 Suivi budgétaire<br><span style="font-size:10px;font-weight:400;opacity:0.85">comparatif_budget_realise.csv</span></button>
+        <input type="file" id="budgetFile" accept=".csv,text/csv,.txt" style="display:none" onchange="window.suiviBudgetaire(event)">
+        <button class="btn btn-bleu" onclick="document.getElementById('csvContratsFile').click()" title="Fichier attendu : depenses_en_cours.csv (même fichier que le rapprochement des dépenses)">📑 Rapprocher les contrats<br><span style="font-size:10px;font-weight:400;opacity:0.85">depenses_en_cours.csv</span></button>
+        <input type="file" id="csvContratsFile" accept=".csv,text/csv,.txt" style="display:none" onchange="window.rapprocherCSVContrats(event)">
+        <button class="btn btn-ghost" onclick="window.restaurerSecours()">↩️ Restaurer la copie de secours</button>
         <hr style="border:none;border-top:1px solid var(--border);margin:4px 0">
         <button class="btn btn-rouge" onclick="window.resetData()">🗑️ Réinitialiser toutes les données</button>
       </div>
@@ -1335,6 +1390,7 @@ a:hover { text-decoration: underline; }
 const STORAGE_KEY = 'pics_db';
 
 const DB_DEFAUT = {
+  csvReglees: [],
   reunions:       [],
   actions:        [],
   nonconformites: [],
@@ -1360,6 +1416,7 @@ const DB_DEFAUT = {
     gravitesNC:       ['Mineure','Modérée','Majeure','Critique','Non applicable'],
     typesDocs:        ['Contrat','Devis','Facture','OS','CR Réunion','Courrier','Administratif','Autre'],
     presents:         [],
+    responsables:     [],
     statutsActions:   ['En cours','Terminée'],
     statutsNC:        ['Ouverte','Résolue','Clôturée'],
     statutsReunions:  ['Planifiée','Tenue','Annulée'],
@@ -1400,6 +1457,16 @@ function chargerDB() {
 
 function sauverDB() {
   try {
+    const _jour = new Date().toISOString().slice(0, 10);
+    if (localStorage.getItem(STORAGE_KEY + '_secours_jour') !== _jour) {
+      const _prec = localStorage.getItem(STORAGE_KEY);
+      if (_prec) {
+        localStorage.setItem(STORAGE_KEY + '_secours', _prec);
+        localStorage.setItem(STORAGE_KEY + '_secours_info',
+          JSON.stringify({ date: new Date().toISOString(), motif: 'copie quotidienne' }));
+      }
+      localStorage.setItem(STORAGE_KEY + '_secours_jour', _jour);
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
   } catch(e) {
     console.error('sauverDB:', e);
@@ -1437,6 +1504,10 @@ window.openModal = function(nom) {
   if (nom === 'params') window.initParams();
 };
 
+window._fermerFicheSansRetour = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+};
 window.closeModal = function(nom) {
   const overlay = document.getElementById('modal-' + nom);
   if (overlay) overlay.classList.remove('open');
@@ -1612,21 +1683,43 @@ window.exportData = function() {
   URL.revokeObjectURL(url);
 };
 
-window.exportDataHorodate = function() {
+window.exportDataHorodate = async function() {
   const now = new Date();
   const pad = n => String(n).padStart(2,'0');
   const h   = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate())
             + '_' + pad(now.getHours()) + 'h' + pad(now.getMinutes());
   const json = JSON.stringify(DB, null, 2);
+  const nomFichier = 'pics_backup_' + h + '.json';
+  // Choix de l'emplacement par l'utilisateur (Edge, Chrome, Opera)
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: nomFichier,
+        types: [{ description: 'Sauvegarde PICS (JSON)', accept: { 'application/json': ['.json'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(new Blob([json], { type: 'application/json' }));
+      await writable.close();
+      localStorage.setItem('pics_dernier_export', window.today());
+      if (window.majRappelExport) window.majRappelExport();
+      return;
+    } catch(e) {
+      if (e && e.name === 'AbortError') return; // l'utilisateur a annulé
+      // autre erreur : repli sur le téléchargement classique ci-dessous
+    }
+  }
+  // Repli : téléchargement classique (Firefox, Safari...)
   const blob = new Blob([json], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = 'pics_backup_' + h + '.json';
+  a.download = nomFichier;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 100);
+  localStorage.setItem('pics_dernier_export', window.today());
+  if (window.majRappelExport) window.majRappelExport();
 };
 
 window.importData = function(evt) {
@@ -1641,6 +1734,7 @@ window.importData = function(evt) {
         file.name,
         'Importer',
         function() {
+          if (window._sauverSecours) window._sauverSecours('avant import');
           DB = imported;
           // Compléter les clés manquantes
           for (const k of Object.keys(DB_DEFAUT)) {
@@ -1671,6 +1765,7 @@ window.resetData = function() {
     'Cette action est irréversible. Pensez à exporter vos données avant.',
     'Réinitialiser',
     function() {
+      if (window._sauverSecours) window._sauverSecours('avant réinitialisation');
       DB = JSON.parse(JSON.stringify(DB_DEFAUT));
       sauverDB();
       location.reload();
@@ -1691,7 +1786,7 @@ window.initParams = function() {
   renderSignatures();
   renderListeEditor();
   // Indicateur taille localStorage
-  const _ko = Math.round((localStorage.getItem('pics_db') || '').length / 1024);
+  const _ko = Math.round((localStorage.getItem(STORAGE_KEY) || '').length / 1024);
   const _el = document.getElementById('db-taille-info');
   if (_el) _el.textContent = 'DB locale : ' + _ko + ' Ko / ~5 000 Ko';
   // Activer premier onglet
@@ -1808,6 +1903,7 @@ const LISTES_LABELS = {
   gravitesNC:       'Gravités non-conformités',
   typesDocs:        'Types de documents',
   presents:         'Participants habituels',
+  responsables:     'Responsables habituels (actions)',
   statutsActions:   'Statuts des actions',
   statutsNC:        'Statuts des non-conformités',
   statutsReunions:  'Statuts des réunions',
@@ -1842,6 +1938,7 @@ function renderListeEditor() {
 window.renderListeEditor = renderListeEditor;
 
 window.ajouterItemListe = function(key) {
+  window._saveListes(); // conserver les noms tapés mais pas encore enregistrés
   if (!DB.listes[key]) DB.listes[key] = [];
   DB.listes[key].push('');
   sauverDB();
@@ -1853,7 +1950,15 @@ window.ajouterItemListe = function(key) {
 
 window.supprimerItemListe = function(key, idx) {
   if (!DB.listes[key]) return;
-  DB.listes[key].splice(idx, 1);
+  const items = DB.listes[key];
+  const vals = [];
+  items.forEach((v, i) => {
+    if (i === idx) return; // ligne supprimée
+    const el = document.getElementById(`li-${key}-${i}`);
+    if (el) { const t = el.value.trim(); if (t) vals.push(t); }
+    else if (v && v.trim()) vals.push(v);
+  });
+  DB.listes[key] = vals;
   sauverDB();
   renderListeEditor();
 };
@@ -1982,7 +2087,7 @@ function renderAlertes() {
     html += '</div>';
   }
 
-  if (ncRetard.length) {
+  if (window.modulesAvancesActifs() && ncRetard.length) {
     html += `<div class="alerte-section">
       <div class="alerte-title">🔧 NC en retard (${ncRetard.length})</div>`;
     ncRetard.forEach(n => {
@@ -2002,7 +2107,29 @@ function renderAlertes() {
     .filter(d => d.type === 'Contrat' && d.dateFinContrat && d.dateFinContrat < window.today() && d.statut !== 'Archivé')
     .sort((a,b) => (a.dateFinContrat||'').localeCompare(b.dateFinContrat||''));
 
-  if (contratsExpires.length) {
+  const _in60 = new Date(Date.now() + 60 * 86400000).toISOString().slice(0, 10);
+  const contratsBientot = DB.documents
+    .filter(d => d.type === 'Contrat' && d.dateFinContrat && d.dateFinContrat >= window.today()
+                 && d.dateFinContrat <= _in60 && d.statut !== 'Archivé')
+    .sort((a, b) => (a.dateFinContrat || '').localeCompare(b.dateFinContrat || ''));
+
+  if (window.modulesAvancesActifs() && contratsBientot.length) {
+    html += `<div class="alerte-section">
+      <div class="alerte-title">📑 Contrats arrivant à échéance (${contratsBientot.length})</div>`;
+    contratsBientot.forEach(d => {
+      const presta = window.getPrestaName(d.prestaId);
+      const jours = Math.ceil((new Date(d.dateFinContrat) - new Date(window.today())) / 86400000);
+      html += `<div class="alerte-item alerte-orange" style="cursor:pointer"
+        onclick="(function(){window.showModule('documents',document.querySelector('[data-mod=documents]'));setTimeout(function(){window.ouvrirDoc(${d.id});},100);})()">
+        <span>📑</span>
+        <span style="flex:1">${window.escHtml(d.titre||'Sans titre')}${presta ? ' — '+window.escHtml(presta) : ''}</span>
+        <span style="font-size:12px;color:var(--orange)">Échéance dans ${jours} jour${jours>1?'s':''} (${window.fmtDate(d.dateFinContrat)})</span>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  if (window.modulesAvancesActifs() && contratsExpires.length) {
     html += `<div class="alerte-section">
       <div class="alerte-title">📄 Contrats expirés (${contratsExpires.length})</div>`;
     contratsExpires.forEach(d => {
@@ -2116,7 +2243,7 @@ window._filtrePrestaActions = null;
   const mod = document.getElementById('module-actions');
   if (!mod) return;
   mod.innerHTML = `
-    <div class="section-title" style="color:var(--vert-fonce)">🎯 Actions</div>
+    <div class="section-title" style="color:var(--vert-fonce)">🎯 Actions<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('actions')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-actions" placeholder="🔍 Objet, responsable…"
@@ -2351,6 +2478,26 @@ window.ouvrirAction = function(id) {
 
 window.fermerModalAction = function() {
   document.getElementById('modal-action').classList.remove('open');
+  if (window._retourReunionId != null) {
+    const rid = window._retourReunionId;
+    window._retourReunionId = null;
+    window.ouvrirReunion(rid);
+  } else if (window._retourPrestaId != null) {
+    const pid = window._retourPrestaId;
+    window._retourPrestaId = null;
+    window.ouvrirPresta(pid);
+  } else if (window._retourDocId != null) {
+    const did = window._retourDocId;
+    window._retourDocId = null;
+    window.ouvrirDoc(did);
+  } else if (window._retourNcId != null) {
+    const nid = window._retourNcId;
+    window._retourNcId = null;
+    window.ouvrirNC(nid);
+  } else if (window._retourRecherche) {
+    window._retourRecherche = false;
+    document.getElementById('modal-recherche').classList.add('open');
+  }
 };
 
 window.majLiensAction = function() {
@@ -2413,6 +2560,12 @@ function _remplirFormAction(a, opts) {
 
   document.getElementById('a-objet').value              = a?.objet || '';
   document.getElementById('a-responsable').value        = a?.responsable || '';
+  (function() {
+    const dl = document.getElementById('dl-responsables');
+    if (dl) dl.innerHTML = ((DB.listes && DB.listes.responsables) || [])
+      .filter(n => n && n.trim())
+      .map(n => `<option value="${window.escHtml(n)}">`).join('');
+  })();
   document.getElementById('a-echeance').value           = a?.echeance || '';
   document.getElementById('a-date-realisee').value      = a?.dateRealisee || '';
   document.getElementById('a-doc-lie').value             = a?.docLie        || '';
@@ -2444,6 +2597,7 @@ function _remplirFormAction(a, opts) {
   document.getElementById('a-devis').checked          = a?.devis || false;
   document.getElementById('a-os').checked             = a?.ordreService || false;
   document.getElementById('a-facture').checked        = a?.facture || false;
+  document.getElementById('a-rapprochee').checked     = a?.rapprochee || false;
   document.getElementById('a-date-facture').value     = a?.dateFacture || '';
   document.getElementById('a-mt-devis').value         = a?.mtDevis || '';
   document.getElementById('a-mt-os').value            = a?.mtOS || '';
@@ -2642,6 +2796,7 @@ window.saveAction = function(garderOuverte) {
     devis:               document.getElementById('a-devis').checked,
     ordreService:        document.getElementById('a-os').checked,
     facture:             document.getElementById('a-facture').checked,
+    rapprochee:          document.getElementById('a-rapprochee').checked,
     dateFacture,
     mtDevis:             parseFloat(document.getElementById('a-mt-devis').value) || null,
     mtOS:                parseFloat(document.getElementById('a-mt-os').value) || null,
@@ -3372,16 +3527,16 @@ window.voirActionsPresta = function(prestaId) {
       </div>
 
       <!-- Ligne 1 : Réunion, NC, Statut, Diffusable -->
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 140px;gap:10px;margin-bottom:14px">
+      <div id="a-ligne-liens" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 140px;gap:10px;margin-bottom:14px">
         <div class="form-group" style="margin:0">
           <label style="color:var(--bleu)">Réunion liée</label>
           <select id="a-reunion" onchange="window.majLiensAction()" style="background:var(--bleu-clair);border:2px solid var(--bleu)"><option value="">—</option></select>
         </div>
-        <div class="form-group" style="margin:0">
+        <div class="form-group avance-only" style="margin:0">
           <label style="color:var(--rouge)">NC liée</label>
           <select id="a-nc" onchange="window.majLiensAction()" style="background:var(--rouge-clair);border:2px solid var(--rouge)"><option value="">—</option></select>
         </div>
-        <div class="form-group" style="margin:0">
+        <div class="form-group avance-only" style="margin:0">
           <label style="color:var(--ardoise,#5C6B7A)">Doc lié</label>
           <select id="a-doc-lie" onchange="window.majLiensAction()" style="border:2px solid #5C6B7A;background:#E8ECF0"><option value="">—</option></select>
         </div>
@@ -3404,14 +3559,14 @@ window.voirActionsPresta = function(prestaId) {
       </div>
 
       <!-- NC liée (lecture rapide) -->
-      <div id="a-nc-liee-section" style="margin-top:4px;margin-bottom:14px;border-top:2px solid var(--rouge-clair);padding-top:10px">
+      <div id="a-nc-liee-section" class="avance-only" style="margin-top:4px;margin-bottom:14px;border-top:2px solid var(--rouge-clair);padding-top:10px">
         <div style="font-size:12px;font-weight:800;color:var(--rouge);text-transform:uppercase;
                     letter-spacing:1px;margin-bottom:6px">⚠️ NC liée</div>
         <div id="a-nc-liee-body"><div class="text-sm text-sec" style="padding:4px 0">Aucune NC liée.</div></div>
       </div>
 
       <!-- Document lié (lecture rapide) -->
-      <div id="a-doc-liee-section" style="margin-top:4px;margin-bottom:14px;border-top:2px solid #E8ECF0;padding-top:10px">
+      <div id="a-doc-liee-section" class="avance-only" style="margin-top:4px;margin-bottom:14px;border-top:2px solid #E8ECF0;padding-top:10px">
         <div style="font-size:12px;font-weight:800;color:#5C6B7A;text-transform:uppercase;
                     letter-spacing:1px;margin-bottom:6px">📁 Document lié</div>
         <div id="a-doc-liee-body"><div class="text-sm text-sec" style="padding:4px 0">Aucun document lié.</div></div>
@@ -3425,7 +3580,8 @@ window.voirActionsPresta = function(prestaId) {
         </div>
         <div class="form-group" style="margin:0">
           <label>Responsable</label>
-          <input id="a-responsable">
+          <input id="a-responsable" list="dl-responsables" placeholder="Choisir ou saisir librement…">
+          <datalist id="dl-responsables"></datalist>
         </div>
         <div class="form-group" style="margin:0">
           <label>Type d'action</label>
@@ -3504,7 +3660,12 @@ window.voirActionsPresta = function(prestaId) {
         </div>
         <div id="panel-validation-travaux" style="display: none; grid-template-columns: 1fr; gap: 10px; align-items: center;">
           <div class="form-group" style="margin:0"><label style="color:var(--vert-fonce)">Date facture</label>
-            <input type="date" id="a-date-facture"></div>
+            <input type="date" id="a-date-facture">
+            <div class="flex items-center gap-8" style="margin-top:6px;background:#EAEDF0;border:1px solid #5C6B7A;border-radius:var(--radius-sm);padding:4px 8px">
+              <input type="checkbox" id="a-rapprochee" style="width:16px;height:16px;cursor:pointer;accent-color:#5C6B7A">
+              <label for="a-rapprochee" style="cursor:pointer;font-size:12px;font-weight:700;color:#5C6B7A"
+                     title="Cette action a été vérifiée dans le rapprochement des dépenses : elle n'apparaîtra plus dans le rapport">✔ Rapprochée (contrôle CSV fait)</label>
+            </div></div>
         </div>
       </div>
 
@@ -3571,9 +3732,8 @@ window.voirActionsPresta = function(prestaId) {
 
     </div><!-- /modal-body -->
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;action&#39;)">Annuler</button>
+      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;action&#39;)">Fermer</button>
       <div id="btn-action-docs" style="display: none; gap: 6px;" class="flex">
-        <button class="btn btn-ghost" onclick="window.filtrerDocsParAction(_editingActionId)">📁 Documents liés</button>
         <button class="btn btn-ghost" onclick="window.imprimerAction()">🖨️ Imprimer</button>
       </div>
       <button class="btn btn-vert" style="font-size:14px;font-weight:700;padding:9px 24px" onclick="window.saveAction()">💾 Enregistrer</button>
@@ -3598,7 +3758,7 @@ let _editingContactId  = null;
   const mod = document.getElementById('module-prestataires');
   if (!mod) return;
   mod.innerHTML = `
-    <div class="section-title" style="color:var(--orange)">🏢 Prestataires</div>
+    <div class="section-title" style="color:var(--orange)">🏢 Prestataires<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('prestataires')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-presta" placeholder="🔍 Activités…"
@@ -3781,12 +3941,27 @@ window.ouvrirPresta = function(id) {
 
 window.fermerModalPresta = function() {
   document.getElementById('modal-presta').classList.remove('open');
+  if (window._retourReunionId != null) {
+    const rid = window._retourReunionId;
+    window._retourReunionId = null;
+    window.ouvrirReunion(rid);
+  } else if (window._retourDocId != null) {
+    const did = window._retourDocId;
+    window._retourDocId = null;
+    window.ouvrirDoc(did);
+  } else if (window._retourNcId != null) {
+    const nid = window._retourNcId;
+    window._retourNcId = null;
+    window.ouvrirNC(nid);
+  } else if (window._retourRecherche) {
+    window._retourRecherche = false;
+    document.getElementById('modal-recherche').classList.add('open');
+  }
 };
 
 function _remplirFormPresta(p) {
   document.getElementById('modal-presta-title').textContent =
     p ? p.nom : 'Nouveau prestataire';
-  document.getElementById('presta-actions-btn').style.display = p ? 'flex' : 'none';
   document.getElementById('btn-imprimer-presta').style.display = p ? 'inline-flex' : 'none';
 
   document.getElementById('presta-nom').value      = (p||{}).nom      || '';
@@ -3811,6 +3986,58 @@ function _remplirFormPresta(p) {
     : [];
   window._renderContactsInline();
   _renderDocsPrestaInline(_editingPrestaId);
+
+  // Actions et NC liées (fiche existante uniquement, comme la fiche Réunion)
+  const secA = document.getElementById('p-actions-section');
+  const secN = document.getElementById('p-nc-section');
+  if (secA) secA.style.display = p ? 'block' : 'none';
+  if (secN) secN.style.display = p ? 'block' : 'none';
+  _renderActionsLieesPresta(p ? p.id : null);
+  _renderNCLieesPresta(p ? p.id : null);
+}
+
+function _renderActionsLieesPresta(prestaId) {
+  const cont = document.getElementById('p-actions-liees-body');
+  if (!cont) return;
+  const acts = prestaId ? window.DB.actions.filter(a => a.prestaId === prestaId) : [];
+  if (!acts.length) {
+    cont.innerHTML = '<div class="text-sm text-sec" style="padding:6px">Aucune action liée.</div>';
+    return;
+  }
+  cont.innerHTML = acts.map(a => {
+    const retard = window.isRetard(a.echeance, a.statut);
+    return `<div class="flex items-center gap-8"
+                 style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
+      <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${a.id}</span>
+      <span style="flex:1;font-size:13px;cursor:pointer;color:var(--vert-fonce)"
+            onclick="window._retourPrestaId=_editingPrestaId;window._fermerFicheSansRetour('modal-presta');window.ouvrirAction(${a.id})">
+        ${window.escHtml(a.objet)}
+      </span>
+      ${window.badgeStatut(a.statut)}
+      <span class="text-sm" style="color:${retard?'var(--rouge)':'var(--texte-sec)'}">
+        ${window.fmtDate(a.echeance)}
+      </span>
+    </div>`;
+  }).join('');
+}
+
+function _renderNCLieesPresta(prestaId) {
+  const cont = document.getElementById('p-nc-liees-body');
+  if (!cont) return;
+  const ncs = prestaId ? window.DB.nonconformites.filter(n => n.prestaId === prestaId) : [];
+  if (!ncs.length) {
+    cont.innerHTML = '<div class="text-sm text-sec" style="padding:6px">Aucune NC liée.</div>';
+    return;
+  }
+  cont.innerHTML = ncs.map(n => `<div class="flex items-center gap-8"
+       style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
+    <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${n.id}</span>
+    <span style="flex:1;font-size:13px;cursor:pointer;color:var(--rouge)"
+          onclick="window._retourPrestaId=_editingPrestaId;window._fermerFicheSansRetour('modal-presta');window.ouvrirNC(${n.id})">
+      ${window.escHtml(n.description||'—')}
+    </span>
+    ${window.badgeStatut(n.statut)}
+  </div>`).join('');
 }
 
 function _renderDocsPrestaInline(prestaId) {
@@ -4360,7 +4587,7 @@ window.ajouterContactInline = function() {
 
 <!-- ===== MODALE PRESTATAIRE ===== -->
 <div class="modal-overlay" id="modal-presta">
-  <div class="modal">
+  <div class="modal modal-lg">
     <div class="modal-header" style="background:var(--orange);color:var(--white)">
       <h2 id="modal-presta-title" style="color:var(--white)">Ville de Lyon FACADES</h2>
       <button class="modal-close" style="color:var(--white)" onclick="window.fermerModaleGuardee(&#39;presta&#39;)">✕</button>
@@ -4417,21 +4644,34 @@ window.ajouterContactInline = function() {
         </div>
         <div id="presta-contacts-inline"><div class="text-sm text-sec" style="padding:6px">Aucun contact — cliquez ＋ Ajouter</div></div>
       </div>
+      <!-- Actions liées -->
+      <div id="p-actions-section" style="display:block;margin-top:4px;border-top:2px solid var(--vert-clair);padding-top:14px">
+        <div style="font-size:13px;font-weight:800;color:var(--vert-fonce);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:8px">🎯 Actions liées</div>
+        <div id="p-actions-liees-body"><div class="text-sm text-sec" style="padding:6px">Aucune action liée.</div></div>
+      </div>
+
+      <!-- NC liées -->
+      <div id="p-nc-section" class="avance-only" style="display:block;margin-top:16px;border-top:2px solid var(--rouge-clair);padding-top:14px">
+        <div style="font-size:13px;font-weight:800;color:var(--rouge);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:8px">⚠️ NC liées</div>
+        <div id="p-nc-liees-body"><div class="text-sm text-sec" style="padding:6px">Aucune NC liée.</div></div>
+      </div>
+
       <!-- Documents inline -->
-      <div style="border-top:2px solid var(--bleu-clair);margin-top:4px;padding-top:14px">
+      <div class="avance-only" style="border-top:2px solid var(--bleu-clair);margin-top:4px;padding-top:14px">
         <div class="flex items-center gap-8" style="margin-bottom:10px">
           <label style="color:var(--bleu);margin:0">📁 Documents</label>
-          <button class="btn btn-primary btn-sm ml-auto" onclick="window.fermerModalPresta();window.ouvrirNouveauDoc({prestaId:_editingPrestaId})">
+          <button class="btn btn-primary btn-sm ml-auto" onclick="window._retourPrestaId=_editingPrestaId;window._fermerFicheSansRetour('modal-presta');window.ouvrirNouveauDoc({prestaId:_editingPrestaId})">
             ＋ Nouveau document
           </button>
         </div>
         <div id="presta-docs-inline"></div>
       </div>
-      <div id="presta-actions-btn" style="display: flex; flex: 1 1 0%; gap: 6px;" class="flex">
-        <button class="btn btn-ghost" onclick="window.voirActionsPresta(_editingPrestaId)">🎯 Actions</button>
-        <button class="btn btn-ghost" onclick="window.voirNCPresta()">🔧 NC</button>
-      </div>
-      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;presta&#39;)">Annuler</button>
+    </div>
+    <div class="modal-footer">
+      <div style="flex:1 1 0%"></div>
+      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;presta&#39;)">Fermer</button>
       <button class="btn btn-ghost" id="btn-imprimer-presta" style="display: inline-flex;" onclick="window.imprimerPrestataire()">🖨️ Imprimer</button>
       <button class="btn btn-orange" style="font-size:14px;font-weight:700;padding:9px 24px" onclick="window.savePrestataire()">💾 Enregistrer</button>
     </div>
@@ -4518,7 +4758,7 @@ let _ncLiens      = [];
   const mod = document.getElementById('module-nonconformites');
   if (!mod) return;
   mod.innerHTML = `
-    <div class="section-title" style="color:var(--rouge)">🔧 Non-conformités</div>
+    <div class="section-title" style="color:var(--rouge)">🔧 Non-conformités<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('nonconformites')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-nc" placeholder="🔍 Description…"
@@ -4750,6 +4990,22 @@ window.ouvrirNC = function(id) {
 
 window.fermerModalNC = function() {
   document.getElementById('modal-nc').classList.remove('open');
+  if (window._retourReunionId != null) {
+    const rid = window._retourReunionId;
+    window._retourReunionId = null;
+    window.ouvrirReunion(rid);
+  } else if (window._retourPrestaId != null) {
+    const pid = window._retourPrestaId;
+    window._retourPrestaId = null;
+    window.ouvrirPresta(pid);
+  } else if (window._retourDocId != null) {
+    const did = window._retourDocId;
+    window._retourDocId = null;
+    window.ouvrirDoc(did);
+  } else if (window._retourRecherche) {
+    window._retourRecherche = false;
+    document.getElementById('modal-recherche').classList.add('open');
+  }
 };
 
 window.majLiensNC = function() {
@@ -5511,11 +5767,17 @@ window.renderNonconformites = window.renderNC;
       <div style="display:flex;gap:10px;align-items:flex-end;margin-bottom:14px;flex-wrap:wrap">
         <div class="form-group" style="margin:0;flex:1;min-width:150px">
           <label style="color:var(--bleu)">Réunion liée</label>
-          <select id="nc-reunion-lie" onchange="window.majLiensNC()" style="background:#e8f0fe;border:2px solid var(--bleu)"><option value="">—</option></select>
+          <div style="display:flex;gap:4px;align-items:center">
+          <select id="nc-reunion-lie" onchange="window.majLiensNC()" style="background:#e8f0fe;border:2px solid var(--bleu);flex:1"><option value="">—</option></select>
+          <button class="btn btn-ghost btn-sm btn-icon" title="Ouvrir la réunion" onclick="(function(){var v=document.getElementById('nc-reunion-lie').value;if(v)window.ouvrirReunion(parseInt(v));})()">🔗</button>
+          </div>
         </div>
         <div class="form-group" style="margin:0;flex:1;min-width:150px">
           <label style="color:var(--vert-fonce)">Action liée</label>
-          <select id="nc-action-lie" style="background:var(--vert-clair);border:2px solid var(--vert-fonce)"><option value="">—</option></select>
+          <div style="display:flex;gap:4px;align-items:center">
+          <select id="nc-action-lie" style="background:var(--vert-clair);border:2px solid var(--vert-fonce);flex:1"><option value="">—</option></select>
+          <button class="btn btn-ghost btn-sm btn-icon" title="Ouvrir l'action" onclick="(function(){var v=document.getElementById('nc-action-lie').value;if(v){window._retourNcId=_editingNcId;window._fermerFicheSansRetour('modal-nc');window.ouvrirAction(parseInt(v));}})()">🔗</button>
+          </div>
         </div>
         <div class="form-group" style="margin:0">
           <label style="color:var(--ardoise,#5C6B7A)">Doc lié</label>
@@ -5561,7 +5823,10 @@ window.renderNonconformites = window.renderNC;
       <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">
         <div class="form-group" style="margin:0">
           <label style="color:var(--orange)">Prestataire lié</label>
-          <select id="nc-presta" style="background:var(--orange-clair);border:2px solid var(--orange)"><option value="">—</option></select>
+          <div style="display:flex;gap:4px;align-items:center">
+          <select id="nc-presta" style="background:var(--orange-clair);border:2px solid var(--orange);flex:1"><option value="">—</option></select>
+          <button class="btn btn-ghost btn-sm btn-icon" title="Ouvrir le prestataire" onclick="(function(){var v=document.getElementById('nc-presta').value;if(v){window._retourNcId=_editingNcId;window._fermerFicheSansRetour('modal-nc');window.ouvrirPresta(parseInt(v));}})()">🔗</button>
+          </div>
         </div>
         <div class="form-group" style="margin:0">
           <label>Responsable</label>
@@ -5711,7 +5976,7 @@ window._filtreActionDocs = null;
   const mod = document.getElementById('module-documents');
   if (!mod) return;
   mod.innerHTML = `
-    <div class="section-title" style="color:var(--ardoise)">📁 Documents</div>
+    <div class="section-title" style="color:var(--ardoise)">📁 Documents<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('documents')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-docs" placeholder="🔍 Titre, prestataire…"
@@ -5904,13 +6169,20 @@ window.fermerModalDoc = function() {
   if (document.getElementById('modal-presta').classList.contains('open')) {
     _renderDocsPrestaInline(_editingPrestaId);
   }
+  if (window._retourPrestaId != null) {
+    const pid = window._retourPrestaId;
+    window._retourPrestaId = null;
+    window.ouvrirPresta(pid);
+  } else if (window._retourRecherche) {
+    window._retourRecherche = false;
+    document.getElementById('modal-recherche').classList.add('open');
+  }
 };
 
 function _remplirFormDoc(d, opts) {
   document.getElementById('modal-doc-title').textContent =
     d ? ('Document ' + d.id) : 'Nouveau document';
   document.getElementById('btn-imprimer-doc').style.display = d ? 'inline-flex' : 'none';
-  document.getElementById('btn-supprimer-doc').style.display = d ? 'inline-flex' : 'none';
 
   document.getElementById('d-titre').value    = d?.titre   || '';
   document.getElementById('d-date').value     = d?.date    || window.today();
@@ -5956,6 +6228,7 @@ function _remplirFormDoc(d, opts) {
   }
   window.majChampsContrat();
   window.renderLiensDoc();
+  if (window._renderLiesCroisesDoc) window._renderLiesCroisesDoc(d);
 }
 
 // =====================================================
@@ -6247,7 +6520,7 @@ window.saveNC = function(action) {
         <label>Action liée</label>
         <div style="display:flex;gap:8px;align-items:center">
           <select id="d-action" style="flex:1" onchange="window._toggleBtnOuvrirAction()"><option value="">— Aucune —</option></select>
-          <button id="btn-ouvrir-action-doc" type="button" class="btn btn-bleu btn-sm" style="display:none;white-space:nowrap" onclick="(function(){const v=document.getElementById(&#39;d-action&#39;).value;if(v){window.fermerModalDoc();window.showModule(&#39;actions&#39;,document.querySelector(&#39;[data-mod=actions]&#39;));setTimeout(function(){window.ouvrirAction(parseInt(v));},100);}})()">
+          <button id="btn-ouvrir-action-doc" type="button" class="btn btn-bleu btn-sm" style="display:none;white-space:nowrap" onclick="(function(){const v=document.getElementById(&#39;d-action&#39;).value;if(v){window._retourDocId=_editingDocId;window._fermerFicheSansRetour('modal-document');setTimeout(function(){window.ouvrirAction(parseInt(v));},100);}})()">
             🔗 Ouvrir
           </button>
         </div>
@@ -6295,10 +6568,30 @@ window.saveNC = function(action) {
         <div id="doc-liens-list" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
 
+      <!-- Actions liées -->
+      <div id="d-actions-section" style="display:block;margin-top:16px;border-top:2px solid var(--vert-clair);padding-top:14px">
+        <div style="font-size:13px;font-weight:800;color:var(--vert-fonce);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:8px">🎯 Actions liées</div>
+        <div id="d-actions-liees-body"></div>
+      </div>
+
+      <!-- NC liées -->
+      <div id="d-nc-section" class="avance-only" style="display:block;margin-top:16px;border-top:2px solid var(--rouge-clair);padding-top:14px">
+        <div style="font-size:13px;font-weight:800;color:var(--rouge);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:8px">⚠️ NC liées</div>
+        <div id="d-nc-liees-body"></div>
+      </div>
+
+      <!-- Prestataire lié -->
+      <div id="d-presta-section" style="display:block;margin-top:16px;border-top:2px solid var(--orange-clair);padding-top:14px">
+        <div style="font-size:13px;font-weight:800;color:var(--orange);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:8px">🏢 Prestataire lié</div>
+        <div id="d-presta-lie-body"></div>
+      </div>
+
     </div><!-- /modal-body -->
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;document&#39;)">Annuler</button>
-      <button class="btn btn-rouge" id="btn-supprimer-doc" style="display: inline-flex;" onclick="window.supprimerDocDepuisModal()">🗑 Supprimer</button>
+      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;document&#39;)">Fermer</button>
       <button class="btn btn-ghost" id="btn-imprimer-doc" style="display: inline-flex;" onclick="window.imprimerDoc()">🖨️ Imprimer</button>
       <button class="btn" style="background:var(--ardoise);color:#fff;font-size:14px;font-weight:700;padding:9px 24px" onclick="window.saveDocument()">💾 Enregistrer</button>
     </div>
@@ -6323,7 +6616,7 @@ let _presentsCoches   = [];
   const mod = document.getElementById('module-reunions');
   if (!mod) return;
   mod.innerHTML = `
-    <div class="section-title" style="color:var(--bleu)">📅 Réunions</div>
+    <div class="section-title" style="color:var(--bleu)">📅 Réunions<button class="btn btn-ghost btn-sm" style="margin-left:auto;color:var(--ardoise,#5C6B7A);background:var(--gris-tres-clair);font-size:13px;padding:3px 10px;font-weight:400;opacity:0.85" onclick="window.ouvrirGuide('reunions')" title="Aide sur ce module">❓</button></div>
 
     <div class="toolbar">
       <input type="text" id="search-reunions" placeholder="🔍 Titre…"
@@ -6472,6 +6765,10 @@ window.ouvrirReunion = function(id) {
 
 window.fermerModalReunion = function() {
   document.getElementById('modal-reunion').classList.remove('open');
+  if (window._retourRecherche) {
+    window._retourRecherche = false;
+    document.getElementById('modal-recherche').classList.add('open');
+  }
 };
 
 function _remplirFormReunion(r) {
@@ -6504,6 +6801,9 @@ function _remplirFormReunion(r) {
   if (secActs) secActs.style.display = r ? 'block' : 'none';
   if (r) _renderActionsLieesReunion(r.id);
   if (r) _renderNCLieesReunion(r.id);
+  const _secRP = document.getElementById('r-prestas-section');
+  if (_secRP) _secRP.style.display = r ? 'block' : 'none';
+  if (r && window._renderPrestasLiesReunion) window._renderPrestasLiesReunion(r.id);
   _reunionLiens = r?.liens ? JSON.parse(JSON.stringify(r.liens)) : [];
   window.renderLiensReunion();
 }
@@ -6522,7 +6822,7 @@ function _renderActionsLieesReunion(reunionId) {
                  style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
       <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${a.id}</span>
       <span style="flex:1;font-size:13px;cursor:pointer;color:var(--vert-fonce)"
-            onclick="window.fermerModalReunion();window.ouvrirAction(${a.id})">
+            onclick="window._retourReunionId=_editingReunionId;window._fermerFicheSansRetour('modal-reunion');window.ouvrirAction(${a.id})">
         ${window.escHtml(a.objet)}
       </span>
       ${window.badgeStatut(a.statut)}
@@ -6544,7 +6844,7 @@ function _renderNCLieesReunion(reunionId) {
        style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
     <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${n.id}</span>
     <span style="flex:1;font-size:13px;cursor:pointer;color:var(--rouge)"
-          onclick="window.fermerModalReunion();window.ouvrirNC(${n.id})">
+          onclick="window._retourReunionId=_editingReunionId;window._fermerFicheSansRetour('modal-reunion');window.ouvrirNC(${n.id})">
       ${window.escHtml(n.description||'—')}
     </span>
     ${window.badgeStatut(n.statut)}
@@ -6854,7 +7154,7 @@ function _imprimerFicheReunion(r) {
     <h2>Ordre du jour</h2>${odjHTML}
     ${r.cr ? `<h2>Compte-rendu</h2><div class="p-text">${window.escHtml(r.cr)}</div>` : ''}
     ${actions.length ? `<h2>Actions liées (${actions.length})</h2>${actsHTML}` : ''}
-    ${ncs.length ? `<h2>Non-conformités liées (${ncs.length})</h2>${ncsHTML}` : ''}
+    ${(window.modulesAvancesActifs() && ncs.length) ? `<h2>Non-conformités liées (${ncs.length})</h2>${ncsHTML}` : ''}
     <div class="p-sig">
       <div class="p-sig-block">
         <div style="font-size:11px;color:#888;margin-bottom:4px">Émis par</div>
@@ -7031,13 +7331,19 @@ window.imprimerSelectionReunions = function() {
         <div style="font-size:13px;font-weight:800;color:var(--vert-fonce);text-transform:uppercase;
                     letter-spacing:1px;margin-bottom:8px">🎯 Actions liées</div>
         <div id="r-actions-liees-body"><div class="text-sm text-sec" style="padding:6px">Aucune action liée.</div></div>
-        <button class="btn btn-vert btn-sm mt-8" onclick="(function(){window.fermerModalReunion();window.ouvrirNouvelleAction({reunionId:_editingReunionId});})()">
+        <button class="btn btn-vert btn-sm mt-8" onclick="(function(){window._retourReunionId=_editingReunionId;window._fermerFicheSansRetour('modal-reunion');window.ouvrirNouvelleAction({reunionId:_editingReunionId});})()">
           ＋ Ajouter une action
         </button>
       </div>
 
       <!-- NC liées (modif uniquement) -->
-      <div id="r-nc-section" style="display: block; margin-top: 16px; border-top: 2px solid var(--rouge-clair); padding-top: 14px;">
+      <div id="r-prestas-section" style="display:block;margin-top:16px;border-top:2px solid var(--orange-clair);padding-top:14px">
+        <div style="font-size:13px;font-weight:800;color:var(--orange);text-transform:uppercase;
+                    letter-spacing:1px;margin-bottom:8px">🏢 Prestataires liés</div>
+        <div id="r-prestas-lies-body"></div>
+      </div>
+
+      <div id="r-nc-section" class="avance-only" style="display: block; margin-top: 16px; border-top: 2px solid var(--rouge-clair); padding-top: 14px;">
         <div style="font-size:13px;font-weight:800;color:var(--rouge);text-transform:uppercase;
                     letter-spacing:1px;margin-bottom:8px">⚠️ NC liées</div>
         <div id="r-nc-liees-body"><div class="text-sm text-sec" style="padding:6px">Aucune NC liée.</div></div>
@@ -7045,7 +7351,7 @@ window.imprimerSelectionReunions = function() {
 
     </div><!-- /modal-body -->
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;reunion&#39;)">Annuler</button>
+      <button class="btn btn-ghost" onclick="window.fermerModaleGuardee(&#39;reunion&#39;)">Fermer</button>
       <div id="btn-imprimer-reunion" style="display: flex;" class="flex">
         <button class="btn btn-ghost" onclick="window.imprimerReunion()">🖨️ Imprimer</button>
       </div>
@@ -7557,6 +7863,75 @@ window._fermerGrandMail = function() {
 };
 </script>
 
+<div class="modal-overlay" id="modal-guide-simple">
+  <div class="modal" style="max-width:600px;max-height:88vh">
+    <div class="modal-header" style="background:#085041;color:#fff">
+      <h2 id="guide-simple-titre" style="color:#fff;font-size:15px">Guide PICS</h2>
+      <button class="modal-close" style="color:#fff" onclick="window.fermerGuide()">✕</button>
+    </div>
+    <div class="modal-body" id="guide-simple-body" style="overflow-y:auto;padding:16px"></div>
+    <div class="modal-footer" style="display:flex;justify-content:flex-end">
+      <button class="btn btn-ghost" onclick="window.fermerGuide()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-recherche" style="z-index:1400">
+  <div class="modal" style="max-width:640px;max-height:85vh">
+    <div class="modal-header" style="background:#085041;color:#fff">
+      <h2 style="color:#fff;font-size:15px">🔍 Recherche</h2>
+      <button class="modal-close" style="color:#fff" onclick="window.fermerRecherche()">✕</button>
+    </div>
+    <div class="modal-body" style="overflow-y:auto;padding:14px 16px">
+      <input type="text" id="recherche-input" placeholder="Tapez au moins 2 caractères…"
+             oninput="window.lancerRecherche()" style="width:100%;margin-bottom:10px">
+      <div id="recherche-resultats" style="font-size:13px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-contrats">
+  <div class="modal" style="max-width:880px;max-height:90vh">
+    <div class="modal-header" style="background:#085041;color:#fff">
+      <h2 style="color:#fff;font-size:15px">📑 Rapprochement des contrats (CSV)</h2>
+      <button class="modal-close" style="color:#fff" onclick="window.fermerContrats()">✕</button>
+    </div>
+    <div class="modal-body" id="contrats-body" style="overflow-y:auto;padding:16px;font-size:12px"></div>
+    <div class="modal-footer" style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-vert" onclick="window.imprimerContrats()">🖨 Imprimer</button>
+      <button class="btn btn-ghost" onclick="window.fermerContrats()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-budget">
+  <div class="modal" style="max-width:880px;max-height:90vh">
+    <div class="modal-header" style="background:#085041;color:#fff">
+      <h2 style="color:#fff;font-size:15px">📊 Suivi budgétaire (CSV)</h2>
+      <button class="modal-close" style="color:#fff" onclick="window.fermerBudget()">✕</button>
+    </div>
+    <div class="modal-body" id="budget-body" style="overflow-y:auto;padding:16px;font-size:12px"></div>
+    <div class="modal-footer" style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-vert" onclick="window.imprimerBudget()">🖨 Imprimer</button>
+      <button class="btn btn-ghost" onclick="window.fermerBudget()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-rapprochement">
+  <div class="modal" style="max-width:880px;max-height:90vh">
+    <div class="modal-header" style="background:#085041;color:#fff">
+      <h2 style="color:#fff;font-size:15px">💶 Rapprochement des dépenses (CSV)</h2>
+      <button class="modal-close" style="color:#fff" onclick="window.fermerRapprochement()">✕</button>
+    </div>
+    <div class="modal-body" id="rapprochement-body" style="overflow-y:auto;padding:16px;font-size:12px"></div>
+    <div class="modal-footer" style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-vert" onclick="window.imprimerRapprochement()">🖨 Imprimer</button>
+      <button class="btn btn-ghost" onclick="window.fermerRapprochement()">Fermer</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-grand-mail" style="z-index:1300">
   <div class="modal" style="max-width:860px;max-height:95vh">
     <div class="modal-header" style="background:var(--vert-fonce);color:#fff">
@@ -7599,4 +7974,1006 @@ window._fermerGrandMail = function() {
     </div>
   </div>
 </div>
+
+<script>
+// ===== Mode simple / modules avancés (PICS v2) =====
+window.modulesAvancesActifs = function() {
+  return localStorage.getItem('pics_modules_avances') === '1';
+};
+window.applyModulesAvances = function() {
+  var on = window.modulesAvancesActifs();
+  document.body.classList.toggle('mode-simple', !on);
+  var btn = document.getElementById('btn-autres-modules');
+  if (btn) btn.firstElementChild.textContent = on ? '\u2212' : '\u22ef';
+};
+window.toggleModulesAvances = function() {
+  var on = !window.modulesAvancesActifs();
+  localStorage.setItem('pics_modules_avances', on ? '1' : '0');
+  if (!on) {
+    var act = document.querySelector('.module.active');
+    if (act && (act.id === 'module-nonconformites' || act.id === 'module-documents')) {
+      window.showModule('dashboard', document.querySelector('[data-mod=dashboard]'));
+    }
+  }
+  window.applyModulesAvances();
+  if (window.renderDashboard) window.renderDashboard();
+};
+(function() {
+  if (localStorage.getItem('pics_modules_avances') === null) {
+    var actifs = false;
+    try {
+      // Lecture directe de la base stockée : disponible immédiatement,
+      // sans attendre le chargement de l'application (DOMContentLoaded)
+      var raw = localStorage.getItem('pics_db');
+      if (raw) {
+        var db = JSON.parse(raw);
+        actifs = (((db.nonconformites || []).length) + ((db.documents || []).length)) > 0;
+      }
+    } catch(e) {}
+    localStorage.setItem('pics_modules_avances', actifs ? '1' : '0');
+  }
+  window.applyModulesAvances();
+})();
+
+// ===== Guides (PICS v2) =====
+window.ouvrirGuide = function(module) {
+  var titres = {
+    bienvenue:      'Guide PICS',
+    dashboard:      '📊 Tableau de bord',
+    reunions:       '📅 Réunions',
+    actions:        '🎯 Actions',
+    nonconformites: '🔧 Non-conformités',
+    prestataires:   '🏢 Prestataires',
+    documents:      '📁 Documents'
+  };
+  var mod = module || 'bienvenue';
+  document.getElementById('guide-simple-titre').textContent = titres[mod] || 'Guide PICS';
+  document.getElementById('guide-simple-body').innerHTML = window._guideContenu(mod);
+  document.getElementById('modal-guide-simple').classList.add('open');
+};
+
+window.fermerGuide = function() {
+  document.getElementById('modal-guide-simple').classList.remove('open');
+};
+
+window._guideContenu = function(module) {
+  var guides = {};
+  guides['bienvenue'] = '<div style="text-align:center;padding:10px 0 16px"><div style="font-size:40px">🌿</div><div style="font-size:20px;font-weight:800;color:#085041;margin-top:6px">Bienvenue dans PICS</div><div style="font-size:13px;color:#888;margin-top:2px">Pilotage Immobilier Copropriété Syndic</div></div><div style="background:#E1F5EE;border-left:4px solid #1D9E75;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:13px;line-height:1.6"><strong style="color:#085041">🛡️ Sûr et confidentiel</strong><br>PICS est un fichier HTML autonome — <strong>aucune installation, aucun serveur, aucun compte</strong>. Il ne contient aucun code malveillant et ne se connecte jamais à internet. Vos données restent <strong>uniquement sur votre ordinateur</strong>, dans la mémoire de votre navigateur. Rien ne part, rien n&#39;est partagé.</div><div style="background:#E6F1FB;border-left:4px solid #378ADD;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:13px;line-height:1.6"><strong style="color:#378ADD">💾 Sauvegarde de vos données</strong><br>Vos données sont sauvegardées automatiquement dans votre navigateur à chaque modification et toutes les 5 minutes.<br><br>⚠️ <strong>Attention : vider le cache du navigateur efface toutes vos données.</strong><br>Pensez à exporter régulièrement vos données (<strong>💾 Données → ⬇️ Exporter</strong>) : ce fichier JSON est votre sauvegarde.</div><div style="background:#FAEEDA;border-left:4px solid #BA7517;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:13px;line-height:1.6"><strong style="color:#BA7517">🖥️ Fonctionne partout</strong><br>Chrome, Edge, Firefox, Safari — PC ou tablette. Sans installation, sans connexion internet.</div><div style="background:#F8F7F4;border-radius:8px;padding:12px 16px;font-size:13px"><strong>Les 6 modules :</strong><br><br>📊 <strong>Tableau de bord</strong> — Vue d&#39;ensemble<br>📅 <strong>Réunions</strong> — CS, AG, entretiens<br>🎯 <strong>Actions</strong> — Tâches et travaux<br>🔧 <strong>Non-conformités</strong> — Problèmes et litiges<br>🏢 <strong>Prestataires</strong> — Entreprises et contacts<br>📁 <strong>Documents</strong> — Contrats et liens<br><br>🔧 et 📁 sont masqués au premier lancement — cliquez sur <strong>⋯ Autres modules</strong> pour les afficher.</div>';
+  guides['dashboard'] = '<p style="font-size:13px;color:#888;margin-bottom:14px">Vue d&#39;ensemble de votre copropriété.</p><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Les 6 pavés</div><p style="font-size:13px;line-height:1.6;margin-bottom:10px"><strong>Cliquez sur un pavé pour ouvrir directement le module correspondant</strong>, filtré sur ce qui est pertinent.</p><div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;font-size:13px"><div style="display:flex;align-items:center;gap:10px;background:#E6F1FB;border-radius:6px;padding:7px 12px">📅 <strong>Réunions</strong> — nombre total</div><div style="display:flex;align-items:center;gap:10px;background:#E1F5EE;border-radius:6px;padding:7px 12px">🎯 <strong>Actions en cours</strong> — ouvre Actions filtré "En cours"</div><div style="display:flex;align-items:center;gap:10px;background:#FAEEDA;border-radius:6px;padding:7px 12px">⚠️ <strong>Travaux à vérifier</strong> — actions avec anomalie financière</div><div style="display:flex;align-items:center;gap:10px;background:#FCEBEB;border-radius:6px;padding:7px 12px">🔧 <strong>NC ouvertes</strong> — ouvre NC filtré "Ouverte"</div><div style="display:flex;align-items:center;gap:10px;background:#FAEEDA;border-radius:6px;padding:7px 12px">🏢 <strong>Prestataires</strong> — nombre total</div><div style="display:flex;align-items:center;gap:10px;background:#E8ECF0;border-radius:6px;padding:7px 12px">📁 <strong>Documents</strong> — nombre total</div></div><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Les alertes</div><div style="background:#FCEBEB;border-left:4px solid #A32D2D;border-radius:6px;padding:10px 14px;margin-bottom:6px;font-size:13px"><strong style="color:#A32D2D">⏰ Actions en retard</strong> — triées de la plus ancienne. Clic → accès direct à l&#39;action.</div><div style="background:#FCEBEB;border-left:4px solid #A32D2D;border-radius:6px;padding:10px 14px;font-size:13px"><strong style="color:#A32D2D">🔧 NC ouvertes</strong> — les plus graves en premier. Clic → accès direct à la NC.</div>';
+  guides['reunions'] = '<p style="font-size:13px;color:#888;margin-bottom:14px">Enregistrez vos CS, AG et entretiens. Rédigez l&#39;ODJ et le CR, listez les présents, suivez les actions décidées.</p><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Les colonnes</div><div style="display:flex;flex-direction:column;gap:3px;margin-bottom:14px;font-size:12px"><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">Date</strong> Date et heure</div><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">Titre</strong> Nom de la réunion</div><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">Type</strong> CS, AG, entretien...</div><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">Statut</strong> Planifiée / Tenue / Annulée</div><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">Présents</strong> Nombre de participants</div><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">Actions</strong> Terminées / totales — clic pour voir</div><div style="display:flex;gap:8px;padding:5px 10px;background:#E6F1FB;border-radius:5px"><strong style="min-width:90px;color:#378ADD">PJ</strong> 📎 pièces jointes — clic pour ouvrir</div></div><div style="background:#E6F1FB;border-left:4px solid #378ADD;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px"><strong>Créer / modifier</strong> — cliquez sur <strong>+ Nouvelle réunion</strong> ou sur une ligne.</div><div style="background:#F8F7F4;border-radius:6px;padding:10px 14px;font-size:13px"><strong>🖨️ Imprimer</strong> — cochez des réunions → Imprimer sélection. Contient : ordre du jour + compte-rendu + <strong>toutes les actions liées</strong>.</div>';
+  guides['actions'] = '<p style="font-size:13px;color:#888;margin-bottom:14px">Suivez toutes les actions décidées en réunion ou créées directement : travaux, contrats, tâches libres.</p><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Les 3 types</div><div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;font-size:13px"><div style="background:#E1F5EE;border-radius:6px;padding:8px 12px"><strong style="color:#085041">Libre</strong> — tâche générale</div><div style="background:#E1F5EE;border-radius:6px;padding:8px 12px"><strong style="color:#085041">Travaux</strong> — suivi devis / ordre de service / facture avec montants</div><div style="background:#E1F5EE;border-radius:6px;padding:8px 12px"><strong style="color:#085041">Contrat</strong> — suivi facturation et anomalies contractuelles</div></div><div style="background:#E1F5EE;border-left:4px solid #1D9E75;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px">💡 Renseignez la <strong>Date réalisée</strong> → le statut passe automatiquement à "Terminée".</div><div style="background:#FAEEDA;border-left:4px solid #BA7517;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px"><strong style="color:#BA7517">⚠️ Filtre anomalie financière</strong> — travaux avec devis/OS/facture manquants ou écart entre montants.</div><div style="background:#E1F5EE;border-left:4px solid #1D9E75;border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:13px"><strong>✉️ Fil mails</strong> — chaque échange avec le prestataire est enregistré dans la fiche action.</div><div style="background:#F8F7F4;border-radius:6px;padding:10px 14px;font-size:13px"><strong>🖨️ Rapport d&#39;activité</strong> — généré depuis le bouton Rapport en haut de liste.</div>';
+  guides['nonconformites'] = '<p style="font-size:13px;color:#888;margin-bottom:14px">Enregistrez et suivez les manquements des prestataires : défauts d&#39;entretien, non-respects de contrat, sinistres.</p><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Les colonnes</div><div style="display:flex;flex-direction:column;gap:3px;margin-bottom:14px;font-size:12px"><div style="display:flex;gap:8px;padding:5px 10px;background:#FCEBEB;border-radius:5px"><strong style="min-width:90px;color:#A32D2D">Date</strong> Date du constat</div><div style="display:flex;gap:8px;padding:5px 10px;background:#FCEBEB;border-radius:5px"><strong style="min-width:90px;color:#A32D2D">Prestataire</strong> Entreprise concernée</div><div style="display:flex;gap:8px;padding:5px 10px;background:#FCEBEB;border-radius:5px"><strong style="min-width:90px;color:#A32D2D">Gravité</strong> Mineure / Modérée / Majeure / Critique</div><div style="display:flex;gap:8px;padding:5px 10px;background:#FCEBEB;border-radius:5px"><strong style="min-width:90px;color:#A32D2D">Statut</strong> Ouverte / Résolue / Clôturée</div></div><div style="display:flex;flex-direction:column;gap:6px;font-size:13px"><div style="background:#FCEBEB;border-radius:6px;padding:8px 12px">Les lignes <strong>Critique</strong> et <strong>Majeure</strong> ouvertes apparaissent en rouge dans la liste.</div><div style="background:#FCEBEB;border-radius:6px;padding:8px 12px"><strong>✉️ Fil mails</strong> — enregistrez chaque échange avec le prestataire dans la fiche NC.</div><div style="background:#FCEBEB;border-radius:6px;padding:8px 12px"><strong>🖨️ Rapport NC</strong> — inclut causes, évaluation et réponse PCS.</div></div>';
+  guides['prestataires'] = '<p style="font-size:13px;color:#888;margin-bottom:14px">Gérez vos entreprises prestataires, leurs contacts et leurs documents liés.</p><div style="display:flex;flex-direction:column;gap:6px;font-size:13px"><div style="background:#FAEEDA;border-radius:6px;padding:8px 12px"><strong>Contacts</strong> — ajoutez nom, prénom, fonction, téléphone, email dans la fiche.</div><div style="background:#FAEEDA;border-radius:6px;padding:8px 12px"><strong>Documents liés</strong> — les contrats associés s&#39;affichent en bas de fiche.</div><div style="background:#FAEEDA;border-radius:6px;padding:8px 12px"><strong>🎯 Actions</strong> et <strong>🔧 NC</strong> — accès direct aux actions et NC liées à ce prestataire.</div><div style="background:#FAEEDA;border-radius:6px;padding:8px 12px"><strong>SIRET / Contrat / Site</strong> — informations administratives pour référence rapide.</div></div>';
+  guides['documents'] = '<p style="font-size:13px;color:#888;margin-bottom:14px">Enregistrez vos contrats, devis, factures et autres documents avec un lien vers leur fichier.</p><div style="display:flex;flex-direction:column;gap:6px;font-size:13px"><div style="background:#E8ECF0;border-radius:6px;padding:8px 12px">PICS ne stocke pas les fichiers — il enregistre un <strong>lien</strong> vers votre fichier sur OneDrive, réseau ou autre.</div><div style="background:#E8ECF0;border-radius:6px;padding:8px 12px">Pour les <strong>Contrats</strong> : renseignez dates de début/fin et montant — un panneau dédié s&#39;affiche.</div><div style="background:#E8ECF0;border-radius:6px;padding:8px 12px"><strong>Archiver</strong> un document le marque inactif mais il reste consultable.</div><div style="background:#E8ECF0;border-radius:6px;padding:8px 12px"><strong>Filtres</strong> — par type, prestataire, statut ou archivé. Combinables.</div></div>';
+  return guides[module] || guides['bienvenue'];
+};
+</script>
+
+<script>
+// ===== Rapprochement des dépenses (CSV du syndic) =====
+// Lecture seule : ce module ne modifie JAMAIS les données PICS.
+(function() {
+  function _normaliser(s) {
+    return (s || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  }
+  function _nomsMatchent(a, b) {
+    if (!a || !b) return false;
+    if (a.includes(b) || b.includes(a)) return true;
+    const m1 = a.split(/[\s-]+/)[0], m2 = b.split(/[\s-]+/)[0];
+    return m1.length > 2 && m1 === m2;
+  }
+  function _montantCents(raw) {
+    let s = String(raw || '').replace(/["\s\u00a0]/g, '');
+    if (s.includes('.') && s.includes(',')) s = s.replace(/\./g, '');
+    s = s.replace(',', '.');
+    const v = parseFloat(s);
+    return isNaN(v) ? null : Math.round(v * 100);
+  }
+  function _fmtEuros(cents) {
+    return (cents / 100).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €';
+  }
+  function _info(titre, detail) {
+    try {
+      document.getElementById('confirm-msg').textContent = titre;
+      document.getElementById('confirm-detail').textContent = detail || '';
+      document.getElementById('confirm-ok-btn').textContent = 'OK';
+      _confirmCallback = null;
+      document.getElementById('modal-confirm').classList.add('open');
+    } catch (e) { alert(titre + (detail ? '\n' + detail : '')); }
+  }
+
+  window.fermerRapprochement = function() {
+    document.getElementById('modal-rapprochement').classList.remove('open');
+  };
+  window.imprimerRapprochement = function() {
+    if (!window._rapprochementPage) return;
+    const _titreOriginal = document.title;
+    document.title = 'Rapprocher les dépenses';
+    const fr = document.createElement('iframe');
+    fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+    document.body.appendChild(fr);
+    fr.onload = function() {
+      try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) {}
+      setTimeout(function() { fr.remove(); document.title = _titreOriginal; }, 3000);
+    };
+    fr.srcdoc = window._rapprochementPage;
+  };
+
+  // Types de charges écartés du rapprochement (contrats et frais de gestion).
+  // Repère : TYPES_EXCLUS — ajouter ici tout nouveau code à ignorer.
+  // Bornes de l'exercice comptable en cours. Repère Ctrl+F : EXERCICE_DEBUT
+  // À modifier chaque année (format ISO AAAA-MM-JJ, comparaison directe de chaînes).
+  const _EXERCICE_LIBELLE = 'EXERCICE 2025-2026';
+  const _EXERCICE_DEBUT = '2025-10-01';
+  const _EXERCICE_FIN   = '2026-09-30';
+  const _dansExercice = dateFr => {
+    const p = (dateFr || '').split('/');
+    if (p.length !== 3) return false;
+    const iso = p[2] + '-' + p[1] + '-' + p[0];
+    return iso >= _EXERCICE_DEBUT && iso <= _EXERCICE_FIN;
+  };
+
+  const _TYPES_EXCLUS = new Set([
+    "120 - CONTRAT ENTRETIEN MENAGER R",
+    "142 - CONTRAT CHAUFFAGE P2 R",
+    "135 - CONTRAT MINIMAL ASCENSEUR R",
+    "700 - HONORAIRES NR",
+    "195 - CONTRAT ASSURANCE MULTIRISQUES NR",
+    "392 - FRAIS LOCATION MOBILIERE NR",
+    "100 - CONTRAT D'ENTRETIEN R",
+    "150 - CONTRAT D'ENTRETIEN   NR",
+    "304 - COMBUSTIBLES",
+    "302 - ELECTRICITE R",
+    "185 - CONTRAT MINIMAL ASCENSEUR",
+    "751 - FRAIS D'AFFRANCHISSEMENT NR",
+    "761 - FRAIS BANCAIRES NR",
+    "331 - FRAIS DE CONSEIL SYNDICAL",
+    "705 - FRAIS D'ACHEMINEMENT",
+    "899 - ECART DE REPARTITION DEBITEUR",
+    "999 - ECART DE REPARTITION CREDITEUR",
+    "862 - INTERETS DE RETARD COPROPRIETAIRE",
+    "864 - PRODUITS DIVERS COURANTS",
+    "724 - SUIVI SINISTRE",
+    "600 - IMPOTS",
+    "804 - HONORAIRES HUISSIERS   NR",
+    "301 - EAU R",
+    "123 - CONTRAT DERATISATION"
+  ]);
+
+  window.fermerBudget = function() {
+    document.getElementById('modal-budget').classList.remove('open');
+  };
+  window.imprimerBudget = function() {
+    if (!window._budgetPage) return;
+    const _titreOriginal = document.title;
+    document.title = 'Suivi budgétaire';
+    const fr = document.createElement('iframe');
+    fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+    document.body.appendChild(fr);
+    fr.onload = function() {
+      try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) {}
+      setTimeout(function() { fr.remove(); document.title = _titreOriginal; }, 3000);
+    };
+    fr.srcdoc = window._budgetPage;
+  };
+
+  window.suiviBudgetaire = function(evt) {
+    const file = evt.target.files && evt.target.files[0];
+    evt.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+      try {
+        let texte = new TextDecoder('utf-8').decode(reader.result);
+        if (texte.includes('\ufffd')) texte = new TextDecoder('windows-1252').decode(reader.result);
+
+        // Lecture : CLE ; TYPE ; REALISE PASSE ; BUDGET ; REALISE EN COURS
+        const postes = [];
+        texte.split(/\r?\n/).forEach(l => {
+          if (!l.trim()) return;
+          const parts = l.split(';');
+          if (parts.length < 5) return;
+          if (!/^\d/.test(parts[0].trim())) return; // en-tête, TOTAUX, récapitulatifs
+          const n1 = _montantCents(parts[2]), budget = _montantCents(parts[3]), realise = _montantCents(parts[4]);
+          if (n1 === null && budget === null && realise === null) return;
+          postes.push({ cle: parts[0].trim(), type: parts[1].trim(),
+                        n1: n1 || 0, budget: budget || 0, realise: realise || 0 });
+        });
+        if (!postes.length) {
+          _info('Aucun poste lisible dans ce fichier',
+                'Vérifiez qu\u2019il s\u2019agit bien du CSV « comparatif budget / réalisé » du site du syndic.');
+          return;
+        }
+
+        let tB = 0, tR = 0, tN1 = 0;
+        postes.forEach(p => { tB += p.budget; tR += p.realise; tN1 += p.n1; });
+        const pct = tB > 0 ? Math.round(100 * tR / tB) : 0;
+        const depassements = postes.filter(p => p.budget > 0 && p.realise > p.budget)
+          .sort((a, b) => (b.realise - b.budget) - (a.realise - a.budget));
+        const tension = postes.filter(p => p.budget > 0 && p.realise <= p.budget && p.realise >= 0.9 * p.budget)
+          .sort((a, b) => (b.realise / b.budget) - (a.realise / a.budget));
+        const horsBudget = postes.filter(p => p.budget === 0 && p.realise > 0)
+          .sort((a, b) => b.realise - a.realise);
+        const actifs = postes.filter(p => p.budget || p.realise || p.n1);
+
+        const esc = window.escHtml;
+        const copro = (window.DB.params && window.DB.params.copro) || 'PICS';
+        const tbl = (thead, rows) => `<table><thead><tr>${thead}</tr></thead><tbody>${rows}</tbody></table>`;
+        const sTitre = (coul, t) => `<h2 style="font-size:13px;font-weight:800;color:${coul};margin:22px 0 8px;border-bottom:2px solid ${coul};padding-bottom:4px">${t}</h2>`;
+        const petit = t => `<span style="display:block;font-size:10px;color:#999">${esc(t)}</span>`;
+
+        let corps = `<h1 style="font-size:15px;font-weight:800;color:#085041;margin-bottom:10px">${_EXERCICE_LIBELLE}</h1>
+        <div style="background:#f4f6f5;border-radius:8px;padding:12px 16px;margin-bottom:6px;font-size:12px">
+          Fichier « ${esc(file.name)} » — <strong>${actifs.length}</strong> poste(s) actif(s).
+          Budget voté : <strong>${_fmtEuros(tB)}</strong> — Réalisé : <strong>${_fmtEuros(tR)}</strong>
+          (<strong style="color:${pct > 100 ? '#A32D2D' : pct >= 90 ? '#BA7517' : '#085041'}">${pct} %</strong> consommé)
+          — Exercice précédent : ${_fmtEuros(tN1)}. Rien n\u2019a été modifié dans PICS.</div>`;
+
+        if (depassements.length) {
+          corps += sTitre('#A32D2D', '🔴 POSTES EN DÉPASSEMENT (' + depassements.length + ')');
+          corps += tbl('<th>Poste</th><th>Budget</th><th>Réalisé</th><th>Dépassement</th>',
+            depassements.map(p => `<tr><td>${esc(p.type)}${petit(p.cle)}</td><td style="white-space:nowrap">${_fmtEuros(p.budget)}</td><td style="white-space:nowrap">${_fmtEuros(p.realise)}</td><td style="font-weight:700;color:#A32D2D;white-space:nowrap">+${_fmtEuros(p.realise - p.budget)}</td></tr>`).join(''));
+        } else {
+          corps += sTitre('#085041', '✅ Aucun poste en dépassement');
+        }
+
+        if (tension.length) {
+          corps += sTitre('#BA7517', '🟠 POSTES SOUS TENSION — plus de 90 % consommés (' + tension.length + ')');
+          corps += tbl('<th>Poste</th><th>Budget</th><th>Réalisé</th><th>Consommé</th>',
+            tension.map(p => `<tr><td>${esc(p.type)}${petit(p.cle)}</td><td style="white-space:nowrap">${_fmtEuros(p.budget)}</td><td style="white-space:nowrap">${_fmtEuros(p.realise)}</td><td style="font-weight:700;color:#BA7517">${Math.round(100 * p.realise / p.budget)} %</td></tr>`).join(''));
+        }
+
+        if (horsBudget.length) {
+          corps += sTitre('#378ADD', '💡 DÉPENSES HORS BUDGET — postes à 0 € prévus (' + horsBudget.length + ')');
+          corps += tbl('<th>Poste</th><th>Réalisé</th><th>Exercice précédent</th>',
+            horsBudget.map(p => `<tr><td>${esc(p.type)}${petit(p.cle)}</td><td style="font-weight:700;white-space:nowrap">${_fmtEuros(p.realise)}</td><td style="white-space:nowrap;color:#888">${_fmtEuros(p.n1)}</td></tr>`).join(''));
+        }
+
+        corps += sTitre('#5C6B7A', '📄 TABLEAU COMPLET (' + actifs.length + ' postes)');
+        corps += tbl('<th>Poste</th><th>Exercice préc.</th><th>Budget</th><th>Réalisé</th><th>Reste</th><th>%</th>',
+          actifs.map(p => {
+            const reste = p.budget - p.realise;
+            const pc = p.budget > 0 ? Math.round(100 * p.realise / p.budget) : null;
+            return `<tr><td>${esc(p.type)}${petit(p.cle)}</td><td style="white-space:nowrap;color:#888">${_fmtEuros(p.n1)}</td><td style="white-space:nowrap">${_fmtEuros(p.budget)}</td><td style="white-space:nowrap">${_fmtEuros(p.realise)}</td><td style="white-space:nowrap;font-weight:600;color:${reste < 0 ? '#A32D2D' : '#085041'}">${reste < 0 ? '' : '+'}${_fmtEuros(reste)}</td><td style="font-weight:600;color:${pc === null ? '#999' : pc > 100 ? '#A32D2D' : pc >= 90 ? '#BA7517' : '#085041'}">${pc === null ? '—' : pc + ' %'}</td></tr>`;
+          }).join('')
+          + `<tr><td style="font-weight:800">TOTAL</td><td style="font-weight:700;color:#888;white-space:nowrap">${_fmtEuros(tN1)}</td><td style="font-weight:800;white-space:nowrap">${_fmtEuros(tB)}</td><td style="font-weight:800;white-space:nowrap">${_fmtEuros(tR)}</td><td style="font-weight:800;white-space:nowrap;color:${tB - tR < 0 ? '#A32D2D' : '#085041'}">${tB - tR < 0 ? '' : '+'}${_fmtEuros(tB - tR)}</td><td style="font-weight:800">${pct} %</td></tr>`);
+
+        const titre = 'Suivi budgétaire';
+        const page = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+    <title>${titre}</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#1a1a1a;padding:32px 40px}
+      .p-header{border-bottom:3px solid #085041;padding-bottom:12px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end}
+      .p-logo{font-size:20px;font-weight:800;color:#085041}
+      .p-logo span{font-size:12px;font-weight:400;color:#666;display:block}
+      h1{font-size:16px;font-weight:800;color:#085041;margin-bottom:16px}
+      table{width:100%;border-collapse:collapse;margin-bottom:4px}
+      th{background:#085041;color:#fff;padding:6px 9px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+      td{padding:6px 9px;border-bottom:1px solid #eee;vertical-align:top}
+      tr:nth-child(even) td{background:#f9f9f7}
+      .p-footer{margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;display:flex;justify-content:space-between}
+      @media print{body{padding:20px 28px}}
+    </style>
+  </head><body>
+    <div class="p-header">
+      <div class="p-logo">🌿 PICS<span>${esc(copro)}</span></div>
+      <div style="font-size:11px;color:#888">${window.fmtDate(window.today())}</div>
+    </div>
+    <h1>${titre}</h1>
+    ${corps}
+    <div class="p-footer"><span>Contrôle interne du conseil syndical</span><span>PICS — ${titre}</span></div>
+  </body></html>`;
+
+        window._budgetPage = page;
+        document.getElementById('budget-body').innerHTML = corps;
+        document.getElementById('modal-budget').classList.add('open');
+      } catch (err) {
+        _info('Lecture du fichier impossible', 'Le fichier ne semble pas au format attendu. Détail : ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  window.basculerFactureReglee = function(el) {
+    const sig = el.getAttribute('data-sig');
+    if (!window.DB.csvReglees) window.DB.csvReglees = [];
+    const i = window.DB.csvReglees.indexOf(sig);
+    if (el.checked) { if (i < 0) window.DB.csvReglees.push(sig); }
+    else if (i >= 0) window.DB.csvReglees.splice(i, 1);
+    sauverDB();
+    const tr = el.closest('tr');
+    if (tr) {
+      tr.style.opacity = el.checked ? '0.45' : '1';
+      tr.style.textDecoration = el.checked ? 'line-through' : 'none';
+    }
+  };
+
+  // Sous-ensemble de TYPES_EXCLUS qui correspond à de vrais contrats de prestataires
+  // (les frais de gestion ponctuels — affranchissement, frais bancaires, écarts...
+  // n'ont pas de fiche Contrat en face dans PICS et sont donc écartés ici).
+  const _CODES_CONTRATS_REELS = new Set([
+    "120 - CONTRAT ENTRETIEN MENAGER R",
+    "142 - CONTRAT CHAUFFAGE P2 R",
+    "135 - CONTRAT MINIMAL ASCENSEUR R",
+    "700 - HONORAIRES NR",
+    "195 - CONTRAT ASSURANCE MULTIRISQUES NR",
+    "392 - FRAIS LOCATION MOBILIERE NR",
+    "100 - CONTRAT D'ENTRETIEN R",
+    "150 - CONTRAT D'ENTRETIEN   NR",
+    "185 - CONTRAT MINIMAL ASCENSEUR",
+    "123 - CONTRAT DERATISATION",
+    "304 - COMBUSTIBLES",
+    "302 - ELECTRICITE R"
+  ]);
+
+  window.choisirContratLigne = function(sig, contratId) {
+    if (!window.DB.csvContratsChoisis) window.DB.csvContratsChoisis = {};
+    window.DB.csvContratsChoisis[sig] = contratId;
+    sauverDB();
+    if (window._csvContratsTexteBrut) {
+      window._analyserContrats(window._csvContratsTexteBrut, window._csvContratsNomFichier || 'fichier');
+    }
+  };
+
+  window.fermerContrats = function() {
+    document.getElementById('modal-contrats').classList.remove('open');
+  };
+  window.imprimerContrats = function() {
+    if (!window._contratsPage) return;
+    const _titreOriginal = document.title;
+    document.title = 'Rapprocher les contrats';
+    const fr = document.createElement('iframe');
+    fr.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+    document.body.appendChild(fr);
+    fr.onload = function() {
+      try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch (e) {}
+      setTimeout(function() { fr.remove(); document.title = _titreOriginal; }, 3000);
+    };
+    fr.srcdoc = window._contratsPage;
+  };
+
+  window.rapprocherCSVContrats = function(evt) {
+    const file = evt.target.files && evt.target.files[0];
+    evt.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+      try {
+        let texte = new TextDecoder('utf-8').decode(reader.result);
+        if (texte.includes('\ufffd')) texte = new TextDecoder('windows-1252').decode(reader.result);
+        window._csvContratsTexteBrut = texte;
+        window._csvContratsNomFichier = file.name;
+        window._analyserContrats(texte, file.name);
+      } catch (err) {
+        _info('Lecture du fichier impossible', 'Le fichier ne semble pas au format attendu. Détail : ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  window._analyserContrats = function(texte, nomFichier) {
+      try {
+        // Lecture : uniquement les lignes de type CONTRAT (mêmes codes que TYPES_EXCLUS)
+        const lignes = [];
+        texte.split(/\r?\n/).forEach(l => {
+          if (!l.trim()) return;
+          const parts = l.split(';');
+          if (parts.length < 5) return;
+          if (_normaliser(parts[0]).startsWith('DATE')) return;
+          const estUneDate = /^\d{2}\/\d{2}\/\d{4}$/.test(parts[0].trim());
+          if (!estUneDate) return;
+          if (!_dansExercice(parts[0].trim())) return; // hors exercice en cours
+          const type = parts[2].trim();
+          if (!_CODES_CONTRATS_REELS.has(type)) return; // on ne garde QUE les vrais contrats de prestataires
+          const cents = _montantCents(parts[parts.length - 1]);
+          if (cents === null) return;
+          const libelle = parts.slice(3, parts.length - 1).join(';').trim();
+          const prestaNom = libelle.split(' - ')[0].trim();
+          const sig = parts[0].trim() + '|' + type + '|' + libelle + '|' + cents;
+          lignes.push({ date: parts[0].trim(), type: type, libelle: libelle, sig: sig,
+                        prestaNorm: _normaliser(prestaNom), cents: cents, apparie: false });
+        });
+        if (!lignes.length) {
+          _info('Aucune charge de type contrat lisible dans ce fichier',
+                'Vérifiez qu\u2019il s\u2019agit bien du CSV « Dépenses » du site du syndic.');
+          return;
+        }
+
+        // Contrats actifs de PICS (fiches Document type=Contrat, non archivées, non expirées)
+        const auj = window.today();
+        const contrats = window.DB.documents.filter(d =>
+          d.type === 'Contrat' && d.statut !== 'Archivé' && (!d.dateFinContrat || d.dateFinContrat >= auj));
+
+        // Le titre du contrat (« Contrat HERA 3D : ... », « Contrat SAS-ASTEC 26_27 »,
+        // « Contrat ADMINISTRATION-VILLE - VILLE DE LYON - ... ») reprend en général tel quel
+        // le nom du prestataire tel qu'il apparaît dans le CSV du syndic — c'est un signal plus
+        // fiable que le prestataire lié en base, qui peut être absent ou nommé différemment.
+        const nomPresta = d => {
+          let t = _normaliser(d.titre || '').replace(/^CONTRAT\s+/, '');
+          const m = t.match(/^(.*?)(?:\s+-\s+|\s*:\s*|\s+\d+(?![A-Z])(?:[_/]\d+)*|\.$)/);
+          const nomTitre = (m ? m[1] : t).trim();
+          if (nomTitre) return nomTitre;
+          const p = d.prestaId ? window.DB.prestataires.find(x => x.id === d.prestaId) : null;
+          return _normaliser(p ? p.nom : '');
+        };
+
+        // Appariement par prestataire : on garde le détail des factures de chaque contrat (le journal)
+        const dateKey = s => { const p = s.split('/'); return p[2] + p[1] + p[0]; };
+        const _MOTS_VIDES = new Set(['CONTRAT','ENTRETIEN','MINIMAL','FORFAITAIRES','DEPENSES',
+          'GENERALE','SYNDIC','ASSURANCE','LOCATION','CHAUFFAGE']);
+        const motsClefs = (texte, exclure) => {
+          const excl = exclure || new Set();
+          return _normaliser(texte).replace(/[^A-Z0-9 ]/g, ' ').split(/\s+/)
+            .filter(m => m.length > 3 && !/^\d+$/.test(m) && !_MOTS_VIDES.has(m) && !excl.has(m));
+        };
+
+        // Regrouper les contrats actifs par prestataire (un même prestataire peut avoir plusieurs contrats)
+        const contratsParPresta = {};
+        contrats.forEach(d => {
+          const nomD = nomPresta(d);
+          if (!nomD) return;
+          (contratsParPresta[nomD] = contratsParPresta[nomD] || []).push(d);
+        });
+
+        const sansFacture = [];
+        const journal = []; // { contrat, lignes, total }
+        const aRepartir = []; // lignes dont on ne peut pas déterminer le contrat avec certitude
+
+        Object.keys(contratsParPresta).forEach(nomD => {
+          const listeContrats = contratsParPresta[nomD];
+          const cand = lignes.filter(l => !l.apparie && _nomsMatchent(l.prestaNorm, nomD));
+          if (!cand.length) { listeContrats.forEach(d => sansFacture.push(d)); return; }
+
+          if (listeContrats.length === 1) {
+            // Un seul contrat pour ce prestataire : toutes ses lignes lui reviennent
+            cand.forEach(l => { l.apparie = true; });
+            cand.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)));
+            let total = 0; cand.forEach(l => { total += l.cents; });
+            journal.push({ contrat: listeContrats[0], lignes: cand, total: total });
+            return;
+          }
+
+          // Plusieurs contrats pour ce même prestataire : distinguer par mots-clés du titre
+          const excl = motsClefs(nomD.replace(/[^A-Z0-9 ]/g, ' '));
+          const groupes = listeContrats.map(d => ({ d: d, mots: motsClefs(d.titre || '', new Set(excl)), lignes: [] }));
+          const choixMemorises = window.DB.csvContratsChoisis || {};
+          cand.forEach(l => {
+            const idChoisi = choixMemorises[l.sig];
+            if (idChoisi != null) {
+              const g = groupes.find(g => g.d.id === idChoisi);
+              if (g) { l.apparie = true; g.lignes.push(l); return; }
+            }
+            const motsLigne = motsClefs(l.type, new Set(excl));
+            const matches = groupes.filter(g => g.mots.some(m => motsLigne.includes(m)));
+            if (matches.length === 1) { l.apparie = true; matches[0].lignes.push(l); }
+          });
+          groupes.forEach(g => {
+            if (g.lignes.length) {
+              g.lignes.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)));
+              let total = 0; g.lignes.forEach(l => { total += l.cents; });
+              journal.push({ contrat: g.d, lignes: g.lignes, total: total });
+            } else {
+              sansFacture.push(g.d);
+            }
+          });
+          cand.filter(l => !l.apparie).forEach(l => {
+            l.apparie = true; // sort de "sans contrat PICS" : le prestataire est bien identifié
+            aRepartir.push({ ligne: l, contrats: listeContrats });
+          });
+        });
+
+        // Cas particulier : les honoraires du syndic (700 - HONORAIRES NR) ont un libellé
+        // du type « Honoraires Forfaitaires du 01/06/26 au 30/06/26 », sans nom de prestataire.
+        // On les rattache au contrat PICS dont l'objet évoque des honoraires (titre ou objet).
+        const contratHonoraires = sansFacture.find(d => _normaliser(d.titre || '').includes('HONORAIRE'));
+        if (contratHonoraires) {
+          const lignesHonoraires = lignes.filter(l => !l.apparie && l.type === '700 - HONORAIRES NR');
+          if (lignesHonoraires.length) {
+            lignesHonoraires.forEach(l => { l.apparie = true; });
+            lignesHonoraires.sort((a, b) => dateKey(a.date).localeCompare(dateKey(b.date)));
+            let total = 0; lignesHonoraires.forEach(l => { total += l.cents; });
+            journal.push({ contrat: contratHonoraires, lignes: lignesHonoraires, total: total });
+            const idx = sansFacture.indexOf(contratHonoraires);
+            if (idx >= 0) sansFacture.splice(idx, 1);
+          }
+        }
+        journal.sort((a, b) => (a.contrat.prestaId ? window.getPrestaName(a.contrat.prestaId) : '')
+          .localeCompare(b.contrat.prestaId ? window.getPrestaName(b.contrat.prestaId) : ''));
+
+        const _reglees = new Set(window.DB.csvReglees || []);
+        const sansContratTous = lignes.filter(l => !l.apparie);
+        const sansContrat = sansContratTous.filter(l => !_reglees.has(l.sig)).sort((a, b) => b.cents - a.cents);
+        const nbContratsReglees = sansContratTous.length - sansContrat.length;
+        let totalSansContrat = 0;
+        sansContrat.forEach(l => { totalSansContrat += l.cents; });
+
+        const esc = window.escHtml;
+        const copro = (window.DB.params && window.DB.params.copro) || 'PICS';
+        const tbl = (thead, rows) => `<table><thead><tr>${thead}</tr></thead><tbody>${rows}</tbody></table>`;
+        const sTitre = (coul, t) => `<h2 style="font-size:13px;font-weight:800;color:${coul};margin:22px 0 8px;border-bottom:2px solid ${coul};padding-bottom:4px">${t}</h2>`;
+
+        let corps = `<h1 style="font-size:15px;font-weight:800;color:#085041;margin-bottom:10px">${_EXERCICE_LIBELLE}</h1>
+        <div style="background:#f4f6f5;border-radius:8px;padding:12px 16px;margin-bottom:6px;font-size:12px">
+          <strong>${lignes.length}</strong> ligne(s) de charges contrat lue(s) dans « ${esc(nomFichier)} ».
+          <strong>${contrats.length}</strong> contrat(s) actif(s) suivi(s) dans PICS.${nbContratsReglees ? ' <span style="color:#888">(' + nbContratsReglees + ' facture(s) réglée(s) masquée(s))</span>' : ''}
+          Rien n\u2019a été modifié dans PICS.</div>`;
+
+        if (sansFacture.length) {
+          corps += sTitre('#A32D2D', 'CONTRATS PICS SANS FACTURE CSV (' + sansFacture.length + ')');
+          corps += `<div style="font-size:11px;color:#888;margin-bottom:6px">Contrats actifs dont aucune facture n\u2019apparaît dans ce fichier — normal si la périodicité n\u2019est pas mensuelle, sinon à vérifier auprès du syndic.</div>`;
+          corps += tbl('<th>Prestataire</th><th>Objet</th><th>Échéance</th>',
+            sansFacture.map(d => `<tr style="cursor:pointer" onclick="window.ouvrirDoc(${d.id})" title="Ouvrir le contrat"><td style="font-weight:600">${esc(d.prestaId ? window.getPrestaName(d.prestaId) : '—')}<br><span style="font-size:10px;color:#aaa;font-weight:400">repéré comme « ${esc(nomPresta(d) || '—')} »</span></td><td>${esc(d.titre||'—')}</td><td>${d.dateFinContrat ? window.fmtDate(d.dateFinContrat) : '—'}</td></tr>`).join(''));
+        } else {
+          corps += sTitre('#085041', '✅ Tous les contrats actifs ont une facture dans le CSV');
+        }
+
+        if (journal.length) {
+          corps += sTitre('#085041', '📋 JOURNAL DES CONTRATS — factures rapprochées (' + journal.length + ' contrat(s))');
+          journal.forEach(j => {
+            const d = j.contrat;
+            const attendu = d.montantContrat != null && d.montantContrat !== '' ? Math.round(parseFloat(d.montantContrat) * 100) : null;
+            const ecart = attendu !== null ? j.total - attendu : null;
+            corps += `<div style="margin-bottom:14px;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden">
+              <div style="background:#F4F6F5;padding:8px 12px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;cursor:pointer"
+                   onclick="window.ouvrirDoc(${d.id})" title="Ouvrir le contrat">
+                <strong style="color:#085041">${esc(d.prestaId ? window.getPrestaName(d.prestaId) : (nomPresta(d) || '—'))}</strong>
+                <span style="color:#666;font-size:11.5px">${esc(d.titre||'—')}</span>
+                <span style="margin-left:auto;font-size:11.5px">Facturé : <strong>${_fmtEuros(j.total)}</strong></span>
+                ${attendu !== null ? `<span style="font-size:11.5px">Contrat : <strong>${_fmtEuros(attendu)}</strong></span>
+                <span style="font-weight:700;color:${ecart > 0 ? '#A32D2D' : ecart < 0 ? '#378ADD' : '#085041'}">${ecart > 0 ? '+' : ''}${_fmtEuros(ecart)}</span>` : '<span style="font-size:11px;color:#aaa">montant contrat non renseigné</span>'}
+              </div>`
+              + tbl('<th>Date</th><th>Libellé</th><th style="text-align:right">Montant</th>',
+                j.lignes.map(l => `<tr><td style="white-space:nowrap">${esc(l.date)}</td><td style="font-size:11px">${esc(l.libelle)}</td><td style="text-align:right;font-weight:600;white-space:nowrap">${_fmtEuros(l.cents)}</td></tr>`).join(''))
+              + '</div>';
+          });
+        }
+
+        if (aRepartir.length) {
+          corps += sTitre('#BA7517', '🔀 FACTURES À RÉPARTIR MANUELLEMENT (' + aRepartir.length + ')');
+          corps += `<div style="font-size:11px;color:#888;margin-bottom:6px">Ce prestataire a plusieurs contrats actifs dans PICS : impossible de déterminer automatiquement lequel correspond à cette facture. Vérifiez et rattachez-la manuellement.</div>`;
+          corps += tbl('<th>Date</th><th>Type de charge</th><th>Libellé</th><th>Montant</th><th>Rattacher à…</th>',
+            aRepartir.map(e => `<tr><td style="white-space:nowrap">${esc(e.ligne.date)}</td><td style="font-size:11px">${esc(e.ligne.type)}</td><td>${esc(e.ligne.libelle)}</td><td style="font-weight:700;white-space:nowrap">${_fmtEuros(e.ligne.cents)}</td><td style="font-size:11px">${e.contrats.map(d => `<button class="btn btn-ghost btn-sm" style="display:block;width:100%;text-align:left;margin-bottom:3px;color:#378ADD" onclick="window.choisirContratLigne('${e.ligne.sig.replace(/'/g, "\\'")}', ${d.id})">→ ${esc(d.titre||'contrat '+d.id)}</button>`).join('')}</td></tr>`).join(''));
+        }
+
+        if (sansContrat.length) {
+          corps += sTitre('#BA7517', 'FACTURES CSV DE TYPE CONTRAT SANS CONTRAT PICS (' + sansContrat.length + ') — total ' + _fmtEuros(totalSansContrat));
+          corps += `<div style="font-size:11px;color:#888;margin-bottom:6px">Charges de type contrat payées par le syndic sans fiche contrat correspondante dans PICS (onglet Documents, type Contrat).</div>`;
+          corps += `<div style="font-size:11px;color:#888;margin-bottom:6px">Cochez ✔ pour marquer une facture comme réglée sans créer de contrat (abonnement ponctuel, régularisation, avoir…) : elle disparaîtra des prochains rapports.</div>`;
+          corps += tbl('<th style="width:34px" title="Réglée">✔</th><th>Date</th><th>Type de charge</th><th>Libellé</th><th>Montant</th>',
+            sansContrat.map(l => `<tr><td style="text-align:center"><input type="checkbox" class="chk-regle" data-sig="${esc(l.sig)}" title="Marquer comme réglée : disparaîtra des prochains rapports" onclick="window.basculerFactureReglee(this)"></td><td style="white-space:nowrap">${esc(l.date)}</td><td style="font-size:11px">${esc(l.type)}</td><td>${esc(l.libelle)}<br><span style="font-size:10px;color:#aaa">prestataire lu : « ${esc(l.prestaNorm)} »</span></td><td style="font-weight:700;white-space:nowrap">${_fmtEuros(l.cents)}</td></tr>`).join(''));
+        } else {
+          corps += sTitre('#085041', '✅ Toutes les factures contrat du CSV correspondent à un contrat PICS');
+        }
+
+        const titre = 'Rapprochement des contrats';
+        const page = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+    <title>${titre}</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#1a1a1a;padding:32px 40px}
+      .p-header{border-bottom:3px solid #085041;padding-bottom:12px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end}
+      .p-logo{font-size:20px;font-weight:800;color:#085041}
+      .p-logo span{font-size:12px;font-weight:400;color:#666;display:block}
+      h1{font-size:16px;font-weight:800;color:#085041;margin-bottom:16px}
+      table{width:100%;border-collapse:collapse;margin-bottom:4px}
+      th{background:#085041;color:#fff;padding:6px 9px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+      td{padding:6px 9px;border-bottom:1px solid #eee;vertical-align:top}
+      tr:nth-child(even) td{background:#f9f9f7}
+      .p-footer{margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;display:flex;justify-content:space-between}
+      @media print{body{padding:20px 28px}}
+    </style>
+  </head><body>
+    <div class="p-header">
+      <div class="p-logo">🌿 PICS<span>${esc(copro)}</span></div>
+      <div style="font-size:11px;color:#888">${window.fmtDate(window.today())}</div>
+    </div>
+    <h1>${titre}</h1>
+    ${corps}
+    <div class="p-footer"><span>Contrôle interne du conseil syndical</span><span>PICS — ${titre}</span></div>
+  </body></html>`;
+
+        window._contratsPage = page;
+        document.getElementById('contrats-body').innerHTML = corps;
+        document.getElementById('modal-contrats').classList.add('open');
+      } catch (err) {
+        _info('Lecture du fichier impossible', 'Le fichier ne semble pas au format attendu. Détail : ' + err.message);
+      }
+  };
+
+  window.rapprocherCSVDepenses = function(evt) {
+    const file = evt.target.files && evt.target.files[0];
+    evt.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function() {
+      try {
+        // Encodage : UTF-8, sinon Windows (accents du site du syndic)
+        let texte = new TextDecoder('utf-8').decode(reader.result);
+        if (texte.includes('\ufffd')) texte = new TextDecoder('windows-1252').decode(reader.result);
+
+        // Lecture des lignes
+        const lignes = [];
+        let nbEcartees = 0;
+        texte.split(/\r?\n/).forEach(l => {
+          if (!l.trim()) return;
+          const parts = l.split(';');
+          if (parts.length < 5) return;
+          if (_normaliser(parts[0]).startsWith('DATE')) return; // en-tête
+          const estUneDate = /^\d{2}\/\d{2}\/\d{4}$/.test(parts[0].trim());
+          if (!estUneDate) return; // lignes de totaux ou de récapitulatif du fichier
+          if (!_dansExercice(parts[0].trim())) return; // hors exercice en cours
+          const cents = _montantCents(parts[parts.length - 1]);
+          if (cents === null) return;
+          if (_TYPES_EXCLUS.has(parts[2].trim())) { nbEcartees++; return; }
+          const libelle = parts.slice(3, parts.length - 1).join(';').trim();
+          lignes.push({
+            date: parts[0].trim(),
+            type: parts[2].trim(),
+            libelle: libelle,
+            prestataire: libelle.split(' - ')[0].trim(),
+            prestaNorm: _normaliser(libelle.split(' - ')[0]),
+            cents: cents,
+            sig: parts[0].trim() + '|' + parts[2].trim() + '|' + libelle + '|' + cents,
+            apparie: false
+          });
+        });
+        if (!lignes.length) {
+          _info('Aucune dépense lisible dans ce fichier',
+                'Vérifiez qu\u2019il s\u2019agit bien du CSV « Dépenses » du site du syndic (colonnes séparées par des points-virgules).');
+          return;
+        }
+
+        // Actions Travaux de PICS
+        const nomPresta = a => {
+          const p = a.prestaId ? window.DB.prestataires.find(x => x.id === a.prestaId) : null;
+          return _normaliser(p ? p.nom : (a.responsable || ''));
+        };
+        const travaux = window.DB.actions.filter(a => a.travaux);
+        const rapprochees = travaux.filter(a => a.rapprochee);
+
+        // Montant de référence d'une action : facture, sinon OS, sinon devis
+        const montantRef = a => {
+          const f = _montantCents(a.mtFacture), o = _montantCents(a.mtOS), d = _montantCents(a.mtDevis);
+          if (f !== null && f > 0) return f;
+          if (o !== null && o > 0) return o;
+          if (d !== null && d > 0) return d;
+          return null;
+        };
+
+        // Appariement : montant au centime près (départage par nom de prestataire)
+        const sansFacture = [];
+        const aPointer = [];
+        travaux.forEach(a => {
+          const ref = montantRef(a);
+          if (ref === null) { if (!a.rapprochee) sansFacture.push(a); return; }
+          const nomA = nomPresta(a);
+          let cand = lignes.filter(l => !l.apparie && l.cents === ref);
+          if (cand.length > 1) {
+            const parNom = cand.filter(l => _nomsMatchent(l.prestaNorm, nomA));
+            if (parNom.length) cand = parNom;
+          }
+          if (cand.length) {
+            cand[0].apparie = true;
+            if (!a.facture && !a.rapprochee) aPointer.push({ a: a, ligne: cand[0] });
+            return;
+          }
+          if (!a.rapprochee) sansFacture.push(a);
+        });
+
+        let totalCSV = 0;
+        lignes.forEach(l => { totalCSV += l.cents; });
+        const reglees = new Set(window.DB.csvReglees || []);
+        const sansActionTous = lignes.filter(l => !l.apparie);
+        const sansAction = sansActionTous.filter(l => !reglees.has(l.sig))
+          .sort((a, b) => b.cents - a.cents);
+        const nbReglees = sansActionTous.length - sansAction.length;
+        let totalSansAction = 0;
+        sansAction.forEach(l => { totalSansAction += l.cents; });
+
+        // ===== Rapport : deux paragraphes =====
+        const copro = (window.DB.params && window.DB.params.copro) || 'PICS';
+        const esc = window.escHtml;
+        const tbl = (thead, rows) => `<table><thead><tr>${thead}</tr></thead><tbody>${rows}</tbody></table>`;
+        const sTitre = (coul, t) => `<h2 style="font-size:13px;font-weight:800;color:${coul};margin:22px 0 8px;border-bottom:2px solid ${coul};padding-bottom:4px">${t}</h2>`;
+
+        let corps = `<h1 style="font-size:15px;font-weight:800;color:#085041;margin-bottom:10px">${_EXERCICE_LIBELLE}</h1>
+        <div style="background:#f4f6f5;border-radius:8px;padding:12px 16px;margin-bottom:6px;font-size:12px">
+          <strong>${lignes.length}</strong> dépense(s) travaux retenue(s) du fichier « ${esc(file.name)} » — total <strong>${_fmtEuros(totalCSV)}</strong>
+          <span style="color:#888">(${nbEcartees} ligne(s) de contrats et frais de gestion écartée(s) d'office${rapprochees.length ? ' ; ' + rapprochees.length + ' action(s) déjà rapprochée(s), non signalée(s)' : ''}${nbReglees ? ' ; ' + nbReglees + ' facture(s) réglée(s) masquée(s)' : ''})</span>.
+          Rien n'a été modifié dans PICS.</div>`;
+
+        if (sansFacture.length) {
+          corps += sTitre('#A32D2D', '⚠️ ACTIONS TRAVAUX SANS FACTURE CSV (' + sansFacture.length + ')');
+          corps += tbl('<th>ID</th><th>Action</th><th>Prestataire</th><th>Montant PICS</th><th>Statut</th>',
+            sansFacture.map(a => {
+              const ref = montantRef(a);
+              return `<tr style="cursor:pointer" onclick="window.ouvrirAction(${a.id})" title="Ouvrir l'action"><td style="font-family:monospace;font-size:11px">${a.id}</td><td>${esc(a.objet)}</td><td>${esc(a.prestaId ? window.getPrestaName(a.prestaId) : (a.responsable||'—'))}</td><td style="font-weight:700;white-space:nowrap">${ref !== null ? _fmtEuros(ref) : '<span style="color:#A32D2D">montant non renseigné</span>'}</td><td>${esc(a.statut||'—')}</td></tr>`;
+            }).join(''));
+        } else {
+          corps += sTitre('#085041', '✅ Toutes les actions Travaux ont leur facture dans le CSV');
+        }
+
+        if (aPointer.length) {
+          corps += sTitre('#378ADD', '📌 FACTURES ARRIVÉES — À POINTER DANS PICS (' + aPointer.length + ')');
+          corps += `<div style="font-size:11px;color:#888;margin-bottom:6px">Le montant du devis ou de l'ordre de service de ces actions est retrouvé dans le CSV : la facture est arrivée côté syndic. Cliquez pour ouvrir l'action, cochez « Facture reçue » et saisissez le montant.</div>`;
+          corps += tbl('<th>ID</th><th>Action</th><th>Prestataire</th><th>Montant trouvé</th><th>Ligne CSV</th>',
+            aPointer.map(e => `<tr style="cursor:pointer" onclick="window.ouvrirAction(${e.a.id})" title="Ouvrir l'action"><td style="font-family:monospace;font-size:11px">${e.a.id}</td><td>${esc(e.a.objet)}</td><td>${esc(e.a.prestaId ? window.getPrestaName(e.a.prestaId) : (e.a.responsable||'—'))}</td><td style="font-weight:700;white-space:nowrap">${_fmtEuros(e.ligne.cents)}</td><td style="font-size:11px;color:#666">${esc(e.ligne.date)} — ${esc(e.ligne.libelle)}</td></tr>`).join(''));
+        }
+
+        if (sansAction.length) {
+          corps += sTitre('#BA7517', '💡 FACTURES CSV SANS ACTION TRAVAUX (' + sansAction.length + ') — total ' + _fmtEuros(totalSansAction));
+          corps += `<div style="font-size:11px;color:#888;margin-bottom:6px">Cochez ✔ pour marquer une facture comme réglée sans créer d'action (honoraires exceptionnels, cas traités hors PICS…) : elle disparaîtra des prochains rapports.</div>`;
+          corps += tbl('<th style="width:34px" title="Réglée">✔</th><th>Date</th><th>Type de charge</th><th>Libellé</th><th>Montant</th>',
+            sansAction.map(l => `<tr><td style="text-align:center"><input type="checkbox" class="chk-regle" data-sig="${esc(l.sig)}" title="Marquer comme réglée : disparaîtra des prochains rapports" onclick="window.basculerFactureReglee(this)"></td><td style="white-space:nowrap">${esc(l.date)}</td><td style="font-size:11px">${esc(l.type)}</td><td>${esc(l.libelle)}</td><td style="font-weight:700;white-space:nowrap">${_fmtEuros(l.cents)}</td></tr>`).join(''));
+        } else {
+          corps += sTitre('#085041', '✅ Toutes les factures travaux du CSV correspondent à une action');
+        }
+
+        const titre = 'Rapprochement des dépenses';
+        const page = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+    <title>${titre}</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#1a1a1a;padding:32px 40px}
+      .p-header{border-bottom:3px solid #085041;padding-bottom:12px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end}
+      .p-logo{font-size:20px;font-weight:800;color:#085041}
+      .p-logo span{font-size:12px;font-weight:400;color:#666;display:block}
+      h1{font-size:16px;font-weight:800;color:#085041;margin-bottom:16px}
+      table{width:100%;border-collapse:collapse;margin-bottom:4px}
+      th{background:#085041;color:#fff;padding:6px 9px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+      td{padding:6px 9px;border-bottom:1px solid #eee;vertical-align:top}
+      .chk-regle{display:none}
+      tr:nth-child(even) td{background:#f9f9f7}
+      .p-footer{margin-top:32px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#aaa;display:flex;justify-content:space-between}
+      @media print{body{padding:20px 28px}}
+    </style>
+  </head><body>
+    <div class="p-header">
+      <div class="p-logo">\ud83c\udf3f PICS<span>${esc(copro)}</span></div>
+      <div style="font-size:11px;color:#888">${window.fmtDate(window.today())}</div>
+    </div>
+    <h1>${titre}</h1>
+    ${corps}
+    <div class="p-footer"><span>Contrôle interne du conseil syndical</span><span>PICS — ${titre}</span></div>
+  </body></html>`;
+
+        window._rapprochementPage = page;
+        document.getElementById('rapprochement-body').innerHTML = corps;
+        document.getElementById('modal-rapprochement').classList.add('open');
+      } catch (err) {
+        _info('Lecture du fichier impossible', 'Le fichier ne semble pas au format attendu. Détail : ' + err.message);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+})();
+</script>
+
+<script>
+// ===== Rappel de sauvegarde, copie de secours, recherche globale (PICS V2) =====
+(function() {
+
+  // ----- Rappel d'export -----
+  window.majRappelExport = function() {
+    const band = document.getElementById('bandeau-export');
+    if (!band) return;
+    if (window._sansRappelExport) { band.style.display = 'none'; return; }
+    try {
+      const db = window.DB || {};
+      const aDesDonnees = ((db.reunions||[]).length + (db.actions||[]).length +
+                           (db.prestataires||[]).length + (db.nonconformites||[]).length +
+                           (db.documents||[]).length) > 0;
+      const report = localStorage.getItem('pics_rappel_export_report');
+      const auj = new Date().toISOString().slice(0, 10);
+      if (!aDesDonnees || (report && auj < report)) { band.style.display = 'none'; return; }
+      const dernier = localStorage.getItem('pics_dernier_export');
+      const msg = document.getElementById('bandeau-export-msg');
+      if (!dernier) {
+        msg.textContent = 'Vos données n\u2019ont encore jamais été exportées — un export JSON est votre seule sauvegarde si le navigateur est nettoyé.';
+        band.style.display = 'flex';
+      } else {
+        const jours = Math.floor((new Date(auj) - new Date(dernier)) / 86400000);
+        if (jours >= 15) {
+          msg.textContent = 'Dernier export il y a ' + jours + ' jours — pensez à sauvegarder vos données.';
+          band.style.display = 'flex';
+        } else {
+          band.style.display = 'none';
+        }
+      }
+    } catch (e) { band.style.display = 'none'; }
+  };
+  document.addEventListener('DOMContentLoaded', function() { setTimeout(window.majRappelExport, 200); });
+
+  // ----- Copie de secours -----
+  window._sauverSecours = function(motif) {
+    try {
+      const cur = localStorage.getItem(STORAGE_KEY);
+      if (cur) {
+        localStorage.setItem(STORAGE_KEY + '_secours', cur);
+        localStorage.setItem(STORAGE_KEY + '_secours_info',
+          JSON.stringify({ date: new Date().toISOString(), motif: motif }));
+      }
+    } catch (e) {}
+  };
+  window.restaurerSecours = function() {
+    const sec = localStorage.getItem(STORAGE_KEY + '_secours');
+    if (!sec) {
+      try {
+        document.getElementById('confirm-msg').textContent = 'Aucune copie de secours disponible';
+        document.getElementById('confirm-detail').textContent =
+          'Une copie est créée automatiquement chaque jour, et avant chaque import ou réinitialisation.';
+        document.getElementById('confirm-ok-btn').textContent = 'OK';
+        _confirmCallback = null;
+        document.getElementById('modal-confirm').classList.add('open');
+      } catch (e) {}
+      return;
+    }
+    let info = {};
+    try { info = JSON.parse(localStorage.getItem(STORAGE_KEY + '_secours_info') || '{}'); } catch (e) {}
+    const quand = info.date ? new Date(info.date).toLocaleString('fr-FR') : 'date inconnue';
+    window.confirmer(
+      'Restaurer la copie de secours ?',
+      'Copie du ' + quand + (info.motif ? ' (' + info.motif + ')' : '') +
+      '. Vos données actuelles prendront sa place dans la copie de secours : vous pourrez donc revenir en arrière.',
+      'Restaurer',
+      function() {
+        const actuel = localStorage.getItem(STORAGE_KEY);
+        localStorage.setItem(STORAGE_KEY, sec);
+        if (actuel) {
+          localStorage.setItem(STORAGE_KEY + '_secours', actuel);
+          localStorage.setItem(STORAGE_KEY + '_secours_info',
+            JSON.stringify({ date: new Date().toISOString(), motif: 'état remplacé par la restauration' }));
+        }
+        location.reload();
+      }
+    );
+  };
+
+  // ----- Liens croisés des fiches Document et Réunion -----
+  window._renderLiesCroisesDoc = function(d) {
+    ['d-actions-section', 'd-nc-section', 'd-presta-section'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = d ? 'block' : 'none';
+    });
+    if (!d) return;
+    const vide = t => '<div class="text-sm text-sec" style="padding:6px">' + t + '</div>';
+    const bA = document.getElementById('d-actions-liees-body');
+    if (bA) {
+      const acts = window.DB.actions.filter(a =>
+        String(a.docLie) === String(d.id) || (d.actionId && a.id === d.actionId));
+      bA.innerHTML = acts.length ? acts.map(a => `<div class="flex items-center gap-8"
+             style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
+        <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${a.id}</span>
+        <span style="flex:1;font-size:13px;cursor:pointer;color:var(--vert-fonce)"
+              onclick="window._retourDocId=_editingDocId;window._fermerFicheSansRetour('modal-document');window.ouvrirAction(${a.id})">
+          ${window.escHtml(a.objet)}
+        </span>
+        ${window.badgeStatut(a.statut)}
+      </div>`).join('') : vide('Aucune action liée.');
+    }
+    const bN = document.getElementById('d-nc-liees-body');
+    if (bN) {
+      const ncs = window.DB.nonconformites.filter(n => String(n.docLie) === String(d.id));
+      bN.innerHTML = ncs.length ? ncs.map(n => `<div class="flex items-center gap-8"
+             style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
+        <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${n.id}</span>
+        <span style="flex:1;font-size:13px;cursor:pointer;color:var(--rouge)"
+              onclick="window._retourDocId=_editingDocId;window._fermerFicheSansRetour('modal-document');window.ouvrirNC(${n.id})">
+          ${window.escHtml(n.description||'—')}
+        </span>
+        ${window.badgeStatut(n.statut)}
+      </div>`).join('') : vide('Aucune NC liée.');
+    }
+    const bP = document.getElementById('d-presta-lie-body');
+    if (bP) {
+      const p = d.prestaId ? window.DB.prestataires.find(x => x.id === d.prestaId) : null;
+      bP.innerHTML = p ? `<div class="flex items-center gap-8" style="padding:6px 0">
+        <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${p.id}</span>
+        <span style="flex:1;font-size:13px;cursor:pointer;color:var(--orange);font-weight:600"
+              onclick="window._retourDocId=_editingDocId;window._fermerFicheSansRetour('modal-document');window.ouvrirPresta(${p.id})">
+          ${window.escHtml(p.nom)}
+        </span>
+        <span class="text-sm text-sec">${window.escHtml(p.categorie||'')}</span>
+      </div>` : vide('Aucun prestataire lié.');
+    }
+  };
+
+  window._renderPrestasLiesReunion = function(reunionId) {
+    const cont = document.getElementById('r-prestas-lies-body');
+    if (!cont) return;
+    const ids = new Set();
+    window.DB.actions.forEach(a => { if (a.reunionId === reunionId && a.prestaId) ids.add(a.prestaId); });
+    if (window.modulesAvancesActifs()) {
+      window.DB.nonconformites.forEach(n => { if (n.reunionId === reunionId && n.prestaId) ids.add(n.prestaId); });
+    }
+    const prestas = window.DB.prestataires.filter(p => ids.has(p.id));
+    cont.innerHTML = prestas.length ? prestas.map(p => `<div class="flex items-center gap-8"
+           style="padding:6px 0;border-bottom:1px solid var(--gris-tres-clair)">
+      <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${p.id}</span>
+      <span style="flex:1;font-size:13px;cursor:pointer;color:var(--orange);font-weight:600"
+            onclick="window._retourReunionId=_editingReunionId;window._fermerFicheSansRetour('modal-reunion');window.ouvrirPresta(${p.id})">
+        ${window.escHtml(p.nom)}
+      </span>
+      <span class="text-sm text-sec">${window.escHtml(p.categorie||'')}</span>
+    </div>`).join('')
+      : '<div class="text-sm text-sec" style="padding:6px">Aucun prestataire lié (via les actions et NC de cette réunion).</div>';
+  };
+
+  // ----- Recherche globale -----
+  function _norm(s) {
+    return (s || '').toString().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+  function _extrait(texte, terme) {
+    const t = _norm(texte);
+    const i = t.indexOf(terme);
+    if (i < 0) return '';
+    const deb = Math.max(0, i - 30);
+    const fin = Math.min(texte.length, i + terme.length + 45);
+    return (deb > 0 ? '…' : '') + texte.slice(deb, fin) + (fin < texte.length ? '…' : '');
+  }
+  window.ouvrirRecherche = function() {
+    document.getElementById('recherche-input').value = '';
+    document.getElementById('recherche-resultats').innerHTML =
+      '<div class="text-sm text-sec" style="padding:8px">Réunions, actions, prestataires' +
+      (window.modulesAvancesActifs() ? ', non-conformités, documents' : '') + ', contacts et mails.</div>';
+    document.getElementById('modal-recherche').classList.add('open');
+    setTimeout(function() { document.getElementById('recherche-input').focus(); }, 100);
+  };
+  window.fermerRecherche = function() {
+    document.getElementById('modal-recherche').classList.remove('open');
+  };
+  window.lancerRecherche = function() {
+    const terme = _norm(document.getElementById('recherche-input').value.trim());
+    const cont = document.getElementById('recherche-resultats');
+    if (terme.length < 2) { cont.innerHTML = ''; return; }
+    const avance = window.modulesAvancesActifs();
+    const db = window.DB;
+    const contactsDe = pid => db.contacts.filter(c => c.prestaId === pid)
+      .map(c => [c.prenom, c.nom, c.fonction, c.tel, c.email].join(' '));
+    const mailsDe = x => (x.mails || []).map(m => (m.objet || '') + ' ' + (m.corps || ''));
+    const sources = [
+      { ico: '📅', coul: 'var(--bleu)', items: db.reunions,
+        lib: r => r.titre || r.type || 'Réunion', ouvre: 'ouvrirReunion',
+        champs: r => [r.titre, r.type, r.lieu, r.odj, r.cr] },
+      { ico: '🎯', coul: 'var(--vert-fonce)', items: db.actions,
+        lib: a => a.objet || 'Action', ouvre: 'ouvrirAction',
+        champs: a => [a.objet, a.responsable, a.notes, a.historique].concat(mailsDe(a)) },
+      { ico: '🔧', coul: 'var(--rouge)', items: avance ? db.nonconformites : [],
+        lib: n => n.description || 'NC', ouvre: 'ouvrirNC',
+        champs: n => [n.description, n.type, n.localisation, n.causes, n.evaluation, n.reponsePCS, n.notes].concat(mailsDe(n)) },
+      { ico: '🏢', coul: 'var(--orange)', items: db.prestataires,
+        lib: p => p.nom || 'Prestataire', ouvre: 'ouvrirPresta',
+        champs: p => [p.nom, p.activites, p.notes, p.adresse].concat(contactsDe(p.id)) },
+      { ico: '📁', coul: 'var(--ardoise,#5C6B7A)', items: avance ? db.documents : [],
+        lib: d => d.titre || 'Document', ouvre: 'ouvrirDoc',
+        champs: d => [d.titre, d.type, d.notes] }
+    ];
+    let out = '', total = 0;
+    sources.forEach(src => {
+      const trouves = [];
+      (src.items || []).forEach(x => {
+        for (const ch of src.champs(x)) {
+          if (ch && _norm(ch).includes(terme)) { trouves.push({ x: x, ch: ch }); return; }
+        }
+      });
+      if (!trouves.length) return;
+      total += trouves.length;
+      out += trouves.slice(0, 12).map(t => `
+        <div class="flex items-center gap-8" style="padding:7px 4px;border-bottom:1px solid var(--gris-tres-clair);cursor:pointer"
+             onclick="window._retourRecherche=true;window.fermerRecherche();window.${src.ouvre}(${t.x.id})">
+          <span>${src.ico}</span>
+          <span style="font-family:monospace;font-size:11px;color:var(--texte-sec)">${t.x.id}</span>
+          <span style="flex:1">
+            <span style="font-weight:600;color:${src.coul}">${window.escHtml(src.lib(t.x))}</span>
+            <span style="display:block;font-size:11.5px;color:var(--texte-sec)">${window.escHtml(_extrait(t.ch, terme))}</span>
+          </span>
+        </div>`).join('');
+      if (trouves.length > 12) out += `<div class="text-sm text-sec" style="padding:4px">… et ${trouves.length - 12} autre(s), affinez la recherche.</div>`;
+    });
+    cont.innerHTML = out || '<div class="text-sm text-sec" style="padding:8px">Aucun résultat.</div>';
+  };
+
+})();
+</script>
 </body></html>
