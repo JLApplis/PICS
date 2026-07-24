@@ -1,60 +1,92 @@
-# PICS
+<div align="center">
 
-**Outil de gestion pour les conseils syndicaux de copropriété**
+# 🌿 PICS
 
-PICS aide les membres bénévoles d'un conseil syndical à suivre l'activité
-de leur copropriété : réunions, actions en cours, non-conformités des
-prestataires, documents et échanges avec le syndic.
+### Pilotage Immobilier Copropriété Syndic
 
-## Fonctionnalités
+**Un outil libre et gratuit pour les conseils syndicaux bénévoles.**
+Suivez vos réunions, actions, prestataires, documents — et contrôlez les comptes de votre syndic.
 
-- Suivi des réunions (ordre du jour, participants, comptes rendus)
-- Suivi des actions avec échéances et statuts
-- Gestion des non-conformités des prestataires
-- Annuaire des prestataires et de leurs contrats
-- Classement des documents
-- Liens vers vos documents locaux (contrats, comptes rendus, devis...)
-- Rédaction et archivage des mails (avec export PDF)
-- Listes personnalisables (types, statuts, gravités...)
+**[▶️ Essayer la démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** &nbsp;•&nbsp; **[⬇️ Télécharger PICS](https://github.com/JLApplis/PICS/releases/latest)**
 
-## Installation
+*Aucune installation • Aucun compte • Aucun serveur • Vos données restent chez vous*
 
-Aucune installation : PICS est une application autonome dans un seul
-fichier HTML.
+![Licence](https://img.shields.io/badge/licence-GPL_v3-blue) ![Fichier unique](https://img.shields.io/badge/fichier-HTML_unique-green) ![Sans serveur](https://img.shields.io/badge/serveur-aucun-orange)
 
-1. Télécharger le fichier `pics.html`
-2. L'ouvrir dans un navigateur récent (Chrome, Edge, Firefox...)
-3. C'est tout !
+</div>
 
-## Lier des documents locaux
+---
 
-PICS peut ouvrir directement vos documents (contrats, devis, comptes
-rendus...) depuis ses fiches. Pour que cela fonctionne :
+## Ce que PICS résout
 
-1. Créez un sous-répertoire `DOCUMENTS` dans le répertoire où se trouve
-   `pics.html`, et placez-y vos fichiers.
-2. Dans l'Explorateur Windows, faites un clic droit sur le fichier à
-   lier → **« Copier en tant que chemin d'accès »**.
-3. Collez ce chemin dans le champ prévu de la fiche PICS. Les
-   guillemets ajoutés par Windows sont retirés automatiquement.
+Vous êtes bénévole dans un conseil syndical. Entre les réunions, les devis, les relances de prestataires, les non-conformités à suivre et les comptes du syndic à vérifier, l'information se disperse dans des mails, des tableurs et des dossiers papier.
 
-Exemple : `"C:\PICS\DOCUMENTS\contrat.pdf"` est enregistré comme
-`C:\PICS\DOCUMENTS\contrat.pdf`
+PICS rassemble tout dans **un seul fichier** qui s'ouvre dans votre navigateur. Vous le téléchargez, vous double-cliquez, vous travaillez. Rien à installer, rien à configurer, rien qui parte sur internet.
 
-## Vos données
+## L'argument n°1 : le contrôle de gestion du syndic
 
-Les données restent **sur votre ordinateur**, dans le stockage local de
-votre navigateur. Rien n'est envoyé sur Internet. Pensez à faire
-régulièrement une sauvegarde grâce à l'export JSON intégré.
+La plupart des outils de copropriété s'arrêtent au suivi des tâches. PICS va plus loin : il **rapproche automatiquement les comptes fournis par votre syndic** avec ce que vous avez suivi de votre côté, à partir des fichiers CSV que le syndic exporte.
+
+Trois outils de rapprochement intégrés :
+
+- **💶 Rapprocher les dépenses** — croise les factures du syndic avec vos actions suivies. Repère les actions sans facture et les factures sans action.
+- **📊 Suivi budgétaire** — compare budget voté et dépenses réelles : dépassements, postes en tension, charges hors budget.
+- **📑 Rapprocher les contrats** — vérifie que les montants facturés correspondent aux contrats en cours, signale les écarts et les factures sans contrat rattaché.
+
+Vous n'avez rien à saisir en double : vous chargez le CSV du syndic, PICS fait le rapprochement et vous montre où regarder.
+
+## Les 6 modules
+
+| Module | À quoi ça sert |
+|---|---|
+| 📊 **Tableau de bord** | Vue d'ensemble, alertes, échéances |
+| 📅 **Réunions** | AG, conseils syndicaux, entretiens, comptes rendus |
+| 🎯 **Actions** | Tâches et travaux, cycle devis / ordre de service / facture |
+| 🔧 **Non-conformités** | Problèmes et litiges, avec fils de mails |
+| 🏢 **Prestataires** | Entreprises, contacts, contrats |
+| 📁 **Documents** | Contrats, factures, liens vers vos fichiers locaux |
+
+Les modules avancés (Non-conformités, Documents) sont masqués au premier lancement pour rester simple : on les affiche via **⋯ Autres modules** quand on en a besoin.
+
+## Vos données restent chez vous
+
+- PICS est un **fichier HTML autonome** : aucune installation, aucun serveur, aucun compte.
+- Il ne se connecte **jamais** à internet et ne contient aucun code de suivi.
+- Vos données sont enregistrées **uniquement dans la mémoire de votre navigateur**, sur votre ordinateur.
+- Sauvegarde par **export JSON horodaté** : un simple fichier que vous gardez où vous voulez.
+
+> ⚠️ **Important** : vider le cache de votre navigateur efface les données stockées. Exportez régulièrement votre fichier JSON de sauvegarde (**💾 Données → ⬇️ Exporter**).
+
+## Démarrer en 3 étapes
+
+1. **[Téléchargez `pics.html`](https://github.com/JLApplis/PICS/releases/latest)** (bouton *Download* de la dernière version).
+2. **Double-cliquez** sur le fichier : il s'ouvre dans votre navigateur (Chrome, Edge, Firefox, Safari).
+3. **Commencez à saisir.** Le guide intégré (bouton ❓) vous accompagne.
+
+> 💡 Pour garder le fichier à portée de main, placez-le dans un dossier dédié et créez un raccourci. Pensez à créer à côté un sous-dossier `DOCUMENTS` si vous voulez lier vos contrats et devis depuis les fiches.
+
+## Essayer sans rien télécharger
+
+La **[démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** ouvre PICS avec des données fictives (la « Résidence les Acacias ») : vous pouvez tout explorer, modifier, ajouter, sans risque. Rien n'est enregistré durablement, et l'export ainsi que le contrôle de gestion CSV y sont désactivés — ce sont des fonctions de la version complète.
+
+## Compatibilité
+
+Fonctionne sur **Chrome, Edge, Firefox, Safari** — PC, Mac ou tablette. Aucune connexion internet requise après le téléchargement.
 
 ## Licence
 
-PICS est un logiciel libre distribué sous licence
-[GNU GPL v3](LICENSE.txt) : vous pouvez l'utiliser, l'étudier, le
-modifier et le redistribuer librement, à condition que les versions
-modifiées restent sous la même licence.
+PICS est distribué sous licence **[GPL v3](LICENSE.txt)**. Vous êtes libre de l'utiliser, l'étudier, le partager et le modifier, à condition de conserver la même licence pour vos versions dérivées.
 
 ## Contact
 
-Jluc — JLApplis
-📧 contact@jlapplis.fr
+Développé bénévolement par **Jean-Luc ALVAREZ** — **[contact@jlapplis.fr](mailto:contact@jlapplis.fr)**
+
+Un retour, une idée, un bug ? Ouvrez une [*issue*](https://github.com/JLApplis/PICS/issues) ou écrivez-moi.
+
+---
+
+<div align="center">
+
+*PICS est gratuit et le restera. Si l'outil vous rend service, faites-le connaître autour de vous.*
+
+</div>
