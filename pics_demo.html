@@ -7898,7 +7898,7 @@ window._fermerGrandMail = function() {
 <div class="modal-overlay" id="modal-contrats">
   <div class="modal" style="max-width:880px;max-height:90vh">
     <div class="modal-header" style="background:#085041;color:#fff">
-      <h2 style="color:#fff;font-size:15px">📑 Rapprochement des contrats (CSV)</h2>
+      <h2 style="color:#fff;font-size:15px">📑 Rapprocher les contrats (CSV)</h2>
       <button class="modal-close" style="color:#fff" onclick="window.fermerContrats()">✕</button>
     </div>
     <div class="modal-body" id="contrats-body" style="overflow-y:auto;padding:16px;font-size:12px"></div>
@@ -7926,7 +7926,7 @@ window._fermerGrandMail = function() {
 <div class="modal-overlay" id="modal-rapprochement">
   <div class="modal" style="max-width:880px;max-height:90vh">
     <div class="modal-header" style="background:#085041;color:#fff">
-      <h2 style="color:#fff;font-size:15px">💶 Rapprochement des dépenses (CSV)</h2>
+      <h2 style="color:#fff;font-size:15px">💶 Rapprocher les dépenses (CSV)</h2>
       <button class="modal-close" style="color:#fff" onclick="window.fermerRapprochement()">✕</button>
     </div>
     <div class="modal-body" id="rapprochement-body" style="overflow-y:auto;padding:16px;font-size:12px"></div>
@@ -8553,7 +8553,7 @@ window._guideContenu = function(module) {
           corps += sTitre('#085041', '✅ Toutes les factures contrat du CSV correspondent à un contrat PICS');
         }
 
-        const titre = 'Rapprochement des contrats';
+        const titre = 'Rapprocher les contrats';
         const page = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
     <title>${titre}</title>
     <style>
@@ -8717,7 +8717,7 @@ window._guideContenu = function(module) {
           corps += sTitre('#085041', '✅ Toutes les factures travaux du CSV correspondent à une action');
         }
 
-        const titre = 'Rapprochement des dépenses';
+        const titre = 'Rapprocher les dépenses';
         const page = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
     <title>${titre}</title>
     <style>
@@ -8985,6 +8985,10 @@ window._guideContenu = function(module) {
 </script>
 <script>
 // ===== Comportements spécifiques à la version de démonstration =====
+
+// Bandeau jaune de rappel de sauvegarde : masqué dans la démo (l'export est réservé à la version complète)
+window._sansRappelExport = true;
+(function(){ var b = document.getElementById('bandeau-export'); if (b) b.style.display = 'none'; })();
 
 // Export / Import : réservés à la version complète
 window._msgDemo = function(titre, detail) {
