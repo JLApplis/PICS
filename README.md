@@ -58,9 +58,9 @@ Le rapprochement des dépenses fait ressortir les **actions réalisées dont la 
 - Vos données sont enregistrées **uniquement dans la mémoire de votre navigateur**, sur votre ordinateur.
 - Sauvegarde par **export JSON horodaté** : un simple fichier que vous gardez où vous voulez.
 
-> ⚠️ **Important** : vider le cache de votre navigateur efface les données stockées. Exportez régulièrement votre fichier JSON de sauvegarde (**💾 Données → ⬇️ Exporter**).
+> ⚠️ **Important — la sauvegarde vous appartient.** Vider le cache de votre navigateur, changer d'ordinateur ou de navigateur efface les données enregistrées. **Votre seule sauvegarde est le fichier JSON que vous exportez vous-même** (**💾 Données → ⬇️ Exporter**). Exportez régulièrement et conservez plusieurs exports successifs, à l'abri.
 
-PICS vous y aide : il vous avertit si vous fermez l'application avec des modifications non exportées, et signale immédiatement si le navigateur refuse d'enregistrer.
+PICS vous y aide : rappel périodique, avertissement si vous fermez l'application avec des modifications non exportées, signalement immédiat si le navigateur refuse d'enregistrer. Ces alertes ne remplacent pas vos propres sauvegardes.
 
 ## Démarrer en 3 étapes
 
@@ -93,6 +93,18 @@ Deux points méritent d'être connus :
 
 - **Toute version modifiée doit être signalée comme telle**, avec sa date (article 5(a) de la licence). C'est ce qui permet de ne pas attribuer à l'auteur d'origine les défauts d'une version qu'il n'a pas écrite.
 - **Le code est libre, les noms ne le sont pas.** « PICS » et « JLApplis » identifient l'origine du logiciel : une version modifiée se distribue sous un nom différent. Les détails figurent dans [TRADEMARK.md](TRADEMARK.md).
+
+## Garantie et responsabilité
+
+PICS est développé **bénévolement** et mis à disposition **gratuitement**, en dehors de toute activité professionnelle. Il est fourni **en l'état, sans garantie d'aucune sorte**, conformément aux articles 15 et 16 de la GPL v3.
+
+**Vos données ne transitent par aucun serveur et ne sont accessibles qu'à vous.** Elles sont enregistrées par votre navigateur, sur votre ordinateur. L'auteur n'y a aucun accès et ne peut donc en assurer ni la conservation ni la restauration.
+
+**La sauvegarde relève de l'utilisateur.** Vider le cache du navigateur, changer d'ordinateur ou de navigateur, ou utiliser la navigation privée fait disparaître les données enregistrées. La seule sauvegarde est le fichier JSON que vous produisez vous-même (**💾 Données → ⬇️ Exporter**) et que vous conservez à l'abri. Exportez régulièrement, et conservez plusieurs exports successifs.
+
+PICS vous y aide — rappel périodique, alerte à la fermeture si des modifications n'ont pas été exportées, signalement immédiat si le navigateur refuse d'enregistrer — mais ces avertissements ne remplacent pas vos propres sauvegardes.
+
+En utilisant PICS, vous reconnaissez avoir pris connaissance de ces informations et assumer la responsabilité de la sauvegarde de vos données.
 
 ## Versions
 
