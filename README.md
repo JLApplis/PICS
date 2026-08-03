@@ -1,19 +1,13 @@
-<div align="center">
-
 # 🌿 PICS
-
 ### Pilotage Immobilier Copropriété Syndic
 
-**Un outil libre et gratuit pour les conseils syndicaux bénévoles.**
-Suivez vos réunions, actions, prestataires, documents — et contrôlez les comptes de votre syndic.
+**Un outil libre et gratuit pour les conseils syndicaux bénévoles.** Suivez vos réunions, actions, prestataires, documents — et contrôlez les comptes de votre syndic.
 
-**[▶️ Essayer la démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** &nbsp;•&nbsp; **[⬇️ Télécharger PICS](https://github.com/JLApplis/PICS/releases/latest/download/pics.html)**
+**[▶️ Essayer la démo en ligne](https://JLApplis.github.io/PICS/pics_demo.html)** • **[⬇️ Télécharger PICS](https://github.com/JLApplis/PICS/releases/latest/download/pics.html)**
 
 *Aucune installation • Aucun compte • Aucun serveur • Vos données restent chez vous*
 
 ![Licence](https://img.shields.io/badge/licence-GPL_v3-blue) ![Fichier unique](https://img.shields.io/badge/fichier-HTML_unique-green) ![Sans serveur](https://img.shields.io/badge/serveur-aucun-orange)
-
-</div>
 
 ---
 
@@ -38,7 +32,7 @@ Vous n'avez rien à saisir en double : vous chargez le CSV du syndic, PICS fait 
 ## Les 6 modules
 
 | Module | À quoi ça sert |
-|---|---|
+| --- | --- |
 | 📊 **Tableau de bord** | Vue d'ensemble, alertes, échéances |
 | 📅 **Réunions** | AG, conseils syndicaux, entretiens, comptes rendus |
 | 🎯 **Actions** | Tâches et travaux, cycle devis / ordre de service / facture |
@@ -48,6 +42,15 @@ Vous n'avez rien à saisir en double : vous chargez le CSV du syndic, PICS fait 
 
 Les modules avancés (Non-conformités, Documents) sont masqués au premier lancement pour rester simple : on les affiche via **⋯ Autres modules** quand on en a besoin.
 
+## Suivre les travaux jusqu'à la facture
+
+Un chantier peut être terminé sans que la facture soit arrivée. PICS distingue donc deux étapes :
+
+- **Date réalisée** — les travaux sont faits
+- **Date terminée** — la facture est arrivée et rapprochée du CSV du syndic
+
+Le rapprochement des dépenses fait ressortir les **actions réalisées dont la facture manque encore** : c'est exactement la liste à transmettre à votre syndic. Un bouton **📋 Copier la sélection** produit un tableau prêt à coller dans un mail.
+
 ## Vos données restent chez vous
 
 - PICS est un **fichier HTML autonome** : aucune installation, aucun serveur, aucun compte.
@@ -56,6 +59,8 @@ Les modules avancés (Non-conformités, Documents) sont masqués au premier lanc
 - Sauvegarde par **export JSON horodaté** : un simple fichier que vous gardez où vous voulez.
 
 > ⚠️ **Important** : vider le cache de votre navigateur efface les données stockées. Exportez régulièrement votre fichier JSON de sauvegarde (**💾 Données → ⬇️ Exporter**).
+
+PICS vous y aide : il vous avertit si vous fermez l'application avec des modifications non exportées, et signale immédiatement si le navigateur refuse d'enregistrer.
 
 ## Démarrer en 3 étapes
 
@@ -84,16 +89,23 @@ Fonctionne sur **Chrome, Edge, Firefox, Safari** — PC, Mac ou tablette. Aucune
 
 PICS est distribué sous licence **[GPL v3](LICENSE.txt)**. Vous êtes libre de l'utiliser, l'étudier, le partager et le modifier, à condition de conserver la même licence pour vos versions dérivées.
 
+Deux points méritent d'être connus :
+
+- **Toute version modifiée doit être signalée comme telle**, avec sa date (article 5(a) de la licence). C'est ce qui permet de ne pas attribuer à l'auteur d'origine les défauts d'une version qu'il n'a pas écrite.
+- **Le code est libre, les noms ne le sont pas.** « PICS » et « JLApplis » identifient l'origine du logiciel : une version modifiée se distribue sous un nom différent. Les détails figurent dans [TRADEMARK.md](TRADEMARK.md).
+
+## Versions
+
+La version en cours est **PICS 3**. Le numéro est affiché dans l'en-tête de l'application et dans le titre de l'onglet : une simple capture d'écran suffit donc à identifier la version utilisée.
+
+**Ce dépôt est la seule source officielle de PICS.** Une copie obtenue ailleurs peut être modifiée, périmée, ou les deux — comparez-la à la [dernière version publiée ici](https://github.com/JLApplis/PICS/releases/latest).
+
 ## Contact
 
-Développé bénévolement par **Jean-Luc ALVAREZ** — **[contact@jlapplis.fr](mailto:contact@jlapplis.fr)**
+Développé bénévolement par **Jean-Luc ALVAREZ** — **<contact@jlapplis.fr>**
 
 Un retour, une idée, un bug ? Ouvrez une [*issue*](https://github.com/JLApplis/PICS/issues) ou écrivez-moi.
 
 ---
 
-<div align="center">
-
 *PICS est gratuit et le restera. Si l'outil vous rend service, faites-le connaître autour de vous.*
-
-</div>
