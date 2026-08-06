@@ -812,12 +812,12 @@ body.mode-simple #module-prestataires .liste-row {
             background:var(--bg);border:1px solid var(--border);border-radius:12px;
             padding:3px 10px;white-space:nowrap"></span>
       <button class="btn btn-ghost" onclick="window.imprimerSelectionDocs()">🖨️ Imprimer sélection</button>
-      <button class="btn btn-ghost" onclick="window.copierTableauDocs()" title="Copier un tableau (Date, Prestataire, Titre, Type, Statut, Notes) pour le mail">📋 Copier la sélection</button>
+      <button class="btn btn-ghost" onclick="window.copierTableauDocs()" title="Copier un tableau (Date, Prestataire, Titre, Type, Statut, Archivé le, Notes) pour le mail">📋 Copier la sélection</button>
       <button class="btn" style="background:var(--ardoise);color:#fff;font-weight:600" onclick="window.ouvrirNouveauDoc()">＋ Nouveau document</button>
     </div>
 
     <div class="liste-container">
-      <div class="liste-header" style="grid-template-columns:36px 46px 130px minmax(0,1fr) 90px 90px 90px 80px 60px 60px 50px 36px">
+      <div class="liste-header" style="grid-template-columns:36px 46px 130px minmax(0,1fr) 90px 90px 90px 92px 60px 60px 50px 36px">
         <span><input type="checkbox" id="chk-all-docs" onchange="window.toggleAllDocs(this)" title="Tout cocher/décocher"></span>
         <span>ID</span><span>Prestataire</span><span>Titre</span><span>Type</span><span>Début</span><span>Fin</span>
         <span>Statut</span><span style="text-align:center">NC</span><span style="text-align:center">Action</span><span style="text-align:center">Lien</span><span></span>
@@ -1619,7 +1619,7 @@ body.mode-simple #module-prestataires .liste-row {
   nonconformites: [
     // 1 — Majeure, ouverte, en retard, avec fil de mails
     { id: 1, description: 'Délai d\'intervention contractuel non respecté lors de la panne d\'ascenseur du 2 juin 2026 : intervention réalisée à J+2 au lieu des 4 heures prévues au contrat.',
-      type: 'Non-respect délai', localisation: 'Cage d\'ascenseur — bâtiment A',
+      type: 'Non-respect délai',
       date: '2026-06-02', statut: 'Ouverte', dateCloture: '',
       gravite: 'Majeure', echeance: '2026-07-10',
       docLie: '', responsable: 'Jean DUPONT', dateEnregistrement: '2026-06-03',
@@ -1641,7 +1641,7 @@ body.mode-simple #module-prestataires .liste-row {
 
     // 2 — Cloturee
     { id: 2, description: 'Containers non rentrés après la collecte à trois reprises en mars 2026, laissés sur le trottoir pendant plusieurs jours.',
-      type: 'Défaut d\'entretien', localisation: 'Local poubelles — rue des Érables',
+      type: 'Défaut d\'entretien',
       date: '2026-03-09', statut: 'Clôturée', dateCloture: '2026-04-28',
       gravite: 'Modérée', echeance: '2026-04-30',
       docLie: '', responsable: 'Louis BERNARD', dateEnregistrement: '2026-03-10',
@@ -1654,7 +1654,7 @@ body.mode-simple #module-prestataires .liste-row {
 
     // 3 — Mineure
     { id: 3, description: 'Facturation de 615 € TTC pour un ramonage devisé à 480 € TTC, sans avenant ni accord préalable du conseil syndical.',
-      type: 'Facturation incorrecte', localisation: 'Chaufferie collective — sous-sol',
+      type: 'Facturation incorrecte',
       date: '2026-06-02', statut: 'Ouverte', dateCloture: '',
       gravite: 'Mineure', echeance: '2026-08-20',
       docLie: '', responsable: 'Jean DUPONT', dateEnregistrement: '2026-06-05',
@@ -1693,6 +1693,14 @@ body.mode-simple #module-prestataires .liste-row {
       date: '2026-03-18', statut: 'Validé',
       notes: 'PV transmis par le syndic le 02/04/2026. Délai de contestation expiré.',
       prestaId: 1, liens: [], dateDebutContrat: '', dateFinContrat: '', montantContrat: '',
+      actionId: null },
+
+    // Contrat echu puis archive -> illustre la date d'archivage automatique
+    { id: 5, titre: 'Contrat d\'entretien chaufferie CALORIS 2020-2025', type: 'Contrat',
+      date: '2020-09-01', statut: 'Archivé', dateArchivage: '2025-09-15',
+      notes: 'Contrat arrivé à échéance le 31/08/2025, non reconduit. Remplacé par le nouveau contrat négocié en septembre 2025. Conservé pour mémoire.',
+      prestaId: 4, liens: [],
+      dateDebutContrat: '2020-09-01', dateFinContrat: '2025-08-31', montantContrat: '3 100 € / an',
       actionId: null }
   ],
 
@@ -1715,7 +1723,7 @@ body.mode-simple #module-prestataires .liste-row {
     statutsContrats:  ['Aucun','En attente','Validé']
   },
 
-  nextId: { r: 6, a: 8, nc: 4, p: 7, d: 5, c: 6 },
+  nextId: { r: 6, a: 8, nc: 4, p: 7, d: 6, c: 6 },
   coches: { actions: [], presta: [], nc: [], docs: [], reunions: [] }
 };
 
@@ -3785,13 +3793,14 @@ window.copierTableauDocs = function() {
       d.titre || '—',
       d.type || '—',
       d.statut || '—',
+      (d.statut === 'Archivé' && d.dateArchivage) ? window.fmtDate(d.dateArchivage) : '—',
       d.notes || '—'
     ];
   }).filter(Boolean);
   if (!donnees.length) { alert('Aucun document trouvé.'); return; }
 
   window.copierTableauMail(
-    ['Date','Prestataire','Titre','Type','Statut','Notes'],
+    ['Date','Prestataire','Titre','Type','Statut','Archivé le','Notes'],
     donnees,
     { couleur: '#378ADD', libelle: 'document(s) copié(s)' }
   );
@@ -3981,106 +3990,6 @@ window.majEcartTravaux = function() {
   const ecart = mtFacture - ref;
   el.textContent = (ecart >= 0 ? '+' : '') + ecart.toFixed(2) + ' €';
   el.style.color = ecart > 0 ? '#c0392b' : ecart < 0 ? '#27ae60' : '#7a5a00';
-};
-
-window.ouvrirAjoutMailAction = function() {
-  const f = document.getElementById('form-ajout-mail-action');
-  f.style.display = 'block';
-  document.getElementById('amail-date').value  = window.today();
-  document.getElementById('amail-objet').value = '';
-  document.getElementById('amail-corps').value = '';
-  document.getElementById('amail-sens').value  = 'Reçu';
-  f.scrollIntoView({ behavior: 'smooth' });
-};
-
-window.fermerAjoutMailAction = function() {
-  document.getElementById('form-ajout-mail-action').style.display = 'none';
-};
-
-window.majContactsMailAction = function() {
-  const prestaId = parseInt(document.getElementById('amail-presta-dest').value);
-  const cont = document.getElementById('amail-contacts-dest');
-  if (!prestaId) { cont.innerHTML = ''; return; }
-  const contacts = window.DB.contacts.filter(c => c.prestaId === prestaId && c.email);
-  if (!contacts.length) {
-    cont.innerHTML = '<span class="text-sec" style="font-size:12px">Aucun contact avec email.</span>';
-    return;
-  }
-  cont.innerHTML = contacts.map(c =>
-    `<label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:2px 0">
-      <input type="checkbox" value="${window.escHtml(c.email)}" style="width:14px;height:14px">
-      <span style="font-size:12px"><strong>${window.escHtml(c.prenom||'')} ${window.escHtml(c.nom||'')}</strong>
-      <span class="text-sec">&lt;${window.escHtml(c.email)}&gt;</span></span>
-    </label>`
-  ).join('');
-
-  // Pré-remplir le corps avec le contexte de l'action
-  const a = _editingActionId ? window.DB.actions.find(x => x.id === _editingActionId) : null;
-  if (a && document.getElementById('amail-sens').value === 'Envoyé') {
-    const prestaA = a.prestaId ? ((window.DB.prestataires.find(p => p.id === a.prestaId)||{}).nom||'') : '';
-    document.getElementById('amail-corps').value = [
-      prestaA ? 'A l\'attention de : ' + prestaA : '',
-      'Bonjour,',
-      '',
-      'Nous vous informons de l\'action suivante :',
-      'Objet : ' + (a.objet||''),
-      prestaA ? 'Prestataire : ' + prestaA : '',
-      'Responsable : ' + (a.responsable||'—'),
-      'Échéance : ' + window.fmtDate(a.echeance) + '     Terminée le : ' + (a.dateRealisee ? window.fmtDate(a.dateRealisee) : '—'),
-      'Statut : ' + a.statut,
-      '',
-      ''
-    ].filter((l, i) => l !== '' || i > 0).join('\n');
-  }
-};
-
-window.sauvegarderMailAction = function() {
-  const objet = document.getElementById('amail-objet').value.trim();
-  if (!objet) {
-    document.getElementById('confirm-msg').textContent = "L'objet du mail est obligatoire.";
-    document.getElementById('confirm-detail').textContent = '';
-    document.getElementById('confirm-ok-btn').textContent = 'OK';
-    _confirmCallback = null;
-    document.getElementById('modal-confirm').classList.add('open');
-    return;
-  }
-  if (!_editingActionId) return;
-  const a = window.DB.actions.find(x => x.id === _editingActionId);
-  if (!a) return;
-  if (!a.mails) a.mails = [];
-
-  const sens  = document.getElementById('amail-sens').value;
-  const corps = document.getElementById('amail-corps').value;
-  const prestaId = parseInt(document.getElementById('amail-presta-dest').value);
-  const sig = window.getSig();
-  const corpsComplet = (prestaId && sens === 'Envoyé')
-    ? corps + '\n\nCordialement,\n' + (sig.nom||'') + (sig.fonction ? '\n' + sig.fonction : '') + (sig.adresse ? '\n' + sig.adresse : '')
-    : corps;
-
-  a.mails.push({
-    id:    Date.now(),
-    date:  document.getElementById('amail-date').value,
-    heure: new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
-    sens,
-    objet,
-    corps: corpsComplet,
-  });
-
-  // Si prestataire + sens Envoyé → ouvrir client mail
-  if (prestaId && sens === 'Envoyé') {
-    const checks = document.querySelectorAll('#amail-contacts-dest input[type=checkbox]:checked');
-    const emails = Array.from(checks).map(c => c.value).join(',');
-    if (emails) {
-      const lnk = document.createElement('a');
-      lnk.href = 'mailto:' + emails + '?subject=' + encodeURIComponent(objet) + '&body=' + encodeURIComponent(corpsComplet);
-      lnk.target = '_blank';
-      document.body.appendChild(lnk); lnk.click(); document.body.removeChild(lnk);
-    }
-  }
-
-  window.sauverDB();
-  window.fermerAjoutMailAction();
-  window.renderFilMailsAction(_editingActionId);
 };
 
 window.renderFilMailsAction = function(actionId) {
@@ -4375,42 +4284,10 @@ window.voirActionsPresta = function(prestaId) {
       <div style="border-top:2px solid var(--vert-clair);margin-top:4px;padding-top:14px">
         <div class="flex items-center gap-8" style="margin-bottom:10px">
           <label style="color:var(--vert-fonce);margin:0">✉️ Échanges mails</label>
-          <button class="btn btn-sm ml-auto" style="background:var(--vert-fonce);color:#fff;display:none" onclick="window.ouvrirAjoutMailAction()">＋ Ajouter</button>
-          <button id="btn-nouveau-mail-action" class="btn btn-sm" style="background: var(--bleu); color: rgb(255, 255, 255); margin-left: 6px; display: inline-flex;" onclick="window.saveAction(false);window.ouvrirGrandMailAction()">✉️ Nouveau mail</button>
+          <button id="btn-nouveau-mail-action" class="btn btn-sm ml-auto" style="background: var(--bleu); color: rgb(255, 255, 255); display: inline-flex;" onclick="window.saveAction(false);window.ouvrirGrandMailAction()">✉️ Nouveau mail</button>
         </div>
         <div id="fil-mails-action"></div>
 
-        <!-- Formulaire ajout mail action -->
-        <div id="form-ajout-mail-action" style="display:none;background:var(--vert-clair);border:2px solid var(--vert);
-             border-radius:var(--radius);padding:14px;margin-top:10px">
-          <div style="font-size:13px;font-weight:700;color:var(--vert-fonce);margin-bottom:10px">Nouvel échange mail</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:10px;margin-bottom:10px">
-            <div class="form-group" style="margin:0">
-              <label>Date</label>
-              <input type="date" id="amail-date">
-            </div>
-            <div class="form-group" style="margin:0">
-              <label>Sens</label>
-              <select id="amail-sens" style="font-weight:700">
-                <option value="Envoyé">📤 Envoyé</option>
-                <option value="Reçu">📥 Reçu</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin:0">
-              <label>Objet</label>
-              <input id="amail-objet" placeholder="Objet du mail…">
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom:10px">
-            <label>Corps du mail</label>
-            <textarea id="amail-corps" placeholder="Collez ici le texte du mail…" style="min-height:80px"></textarea>
-          </div>
-          <div class="flex gap-8" style="justify-content:flex-end">
-            <button class="btn btn-ghost btn-sm" onclick="window.fermerAjoutMailAction()">Annuler</button>
-            <button class="btn btn-sm" style="background:var(--vert-fonce);color:#fff" onclick="window.sauvegarderMailAction()">💾 Enregistrer</button>
-          </div>
-        </div>
       </div>
 
     </div><!-- /modal-body -->
@@ -5583,7 +5460,6 @@ window.renderNC = function() {
       <span>
         <strong>${window.escHtml(n.description||'')}</strong>
         ${n.diffusable ? ' <span title="Diffusable" style="font-size:13px">👥</span>' : ''}
-        ${n.localisation ? `<br><span class="text-sm text-sec">📍 ${window.escHtml(n.localisation)}</span>` : ''}
       </span>
       <span class="text-sm">${window.escHtml(n.type||'—')}</span>
       <span style="font-weight:700;font-size:12px;color:${gc}">${window.escHtml(n.gravite||'—')}</span>
@@ -5739,7 +5615,6 @@ function _remplirFormNC(n, opts) {
   document.getElementById('nc-mails-section').style.display   = 'block';
 
   document.getElementById('nc-desc').value        = n?.description  || '';
-  const ncLocal = document.getElementById('nc-local'); if(ncLocal) ncLocal.value = n?.localisation || '';
   document.getElementById('nc-echeance').value    = n?.echeance      || '';
   var ncDocLie = document.getElementById('nc-doc-lie'); if(ncDocLie) ncDocLie.value = n?.docLie || '';
   document.getElementById('nc-date').value        = n?.date         || window.today();
@@ -5971,7 +5846,6 @@ window.saveNC = function(action) {
     id:          _editingNcId || window.nextId('nc'),
     description: desc,
     type:        document.getElementById('nc-type').value,
-    localisation:(document.getElementById('nc-local')||{value:''}).value,
     date:        document.getElementById('nc-date').value,
     statut,
     dateCloture,
@@ -6214,7 +6088,6 @@ window.notifierPresta = function(ncId) {
     'Date constat : ' + window.fmtDate(n.date),
     'Gravité : ' + (n.gravite||'—'),
     'Statut : ' + n.statut,
-    n.localisation ? 'Localisation : ' + n.localisation : '',
     '',
     'Merci de bien vouloir prendre les mesures nécessaires.',
     '',
@@ -6247,7 +6120,6 @@ window.notifierPresta = function(ncId) {
       'Date constat : ' + window.fmtDate(n.date),
       'Gravité : ' + (n.gravite||'—'),
       'Statut : ' + n.statut,
-      n.localisation ? 'Localisation : ' + n.localisation : '',
       '',
       'Merci de bien vouloir prendre les mesures nécessaires.',
       '',
@@ -6320,7 +6192,6 @@ window.imprimerNC = function(ncId) {
       <div class="meta-row"><label>Statut</label><span>${n.statut}</span></div>
       <div class="meta-row"><label>Date constat</label><span>${window.fmtDate(n.date)}</span></div>
       <div class="meta-row"><label>Prestataire</label><span>${window.escHtml(p ? p.nom : '—')}</span></div>
-      <div class="meta-row"><label>Localisation</label><span>${window.escHtml(n.localisation||'—')}</span></div>
       ${n.dateCloture ? `<div class="meta-row"><label>Date clôture</label><span>${window.fmtDate(n.dateCloture)}</span></div>` : ''}
     </div>
     ${(n.mails && n.mails.length) ? `<h2>Historique des échanges</h2>` + n.mails.map(m => {
@@ -6682,13 +6553,13 @@ window._filtreActionDocs = null;
             background:var(--bg);border:1px solid var(--border);border-radius:12px;
             padding:3px 10px;white-space:nowrap"></span>
       <button class="btn btn-ghost" onclick="window.imprimerSelectionDocs()">🖨️ Imprimer sélection</button>
-      <button class="btn btn-ghost" onclick="window.copierTableauDocs()" title="Copier un tableau (Date, Prestataire, Titre, Type, Statut, Notes) pour le mail">📋 Copier la sélection</button>
+      <button class="btn btn-ghost" onclick="window.copierTableauDocs()" title="Copier un tableau (Date, Prestataire, Titre, Type, Statut, Archivé le, Notes) pour le mail">📋 Copier la sélection</button>
       <button class="btn" style="background:var(--ardoise);color:#fff;font-weight:600" onclick="window.ouvrirNouveauDoc()">＋ Nouveau document</button>
     </div>
 
     <div class="liste-container">
       <div class="liste-header"
-           style="grid-template-columns:36px 46px 130px minmax(0,1fr) 90px 90px 90px 80px 60px 60px 50px 36px">
+           style="grid-template-columns:36px 46px 130px minmax(0,1fr) 90px 90px 90px 92px 60px 60px 50px 36px">
         <span><input type="checkbox" id="chk-all-docs"
                onchange="window.toggleAllDocs(this)" title="Tout cocher/décocher"></span>
         <span>ID</span><span>Prestataire</span><span>Titre</span><span>Type</span><span>Début</span><span>Fin</span>
@@ -6719,24 +6590,13 @@ window.renderDocuments = function() {
       fStatut.appendChild(o);
     });
   }
-  const fNC = document.getElementById('filter-docs-nc');
-  if (fNC && fNC.options.length <= 1) {
-    window.DB.nonconformites.forEach(n => {
-      const o = document.createElement('option');
-      o.value = n.id;
-      o.textContent = 'NC ' + n.id + ' — ' + (n.description||'').slice(0,30);
-      fNC.appendChild(o);
-    });
-  }
 
   const search   = (document.getElementById('search-docs')       || {}).value || '';
   const type     = (document.getElementById('filter-docs-type')  || {}).value || '';
-  const ncId     = (document.getElementById('filter-docs-nc')    || {}).value || '';
 
   const statut = (document.getElementById('filter-docs-statut')||{}).value || '';
   let items = window.DB.documents.filter(d => {
     if (type     && d.type    !== type)      return false;
-    if (ncId     && d.ncId    != ncId)       return false;
     if (statut   && d.statut  !== statut)    return false;
     if (search) {
       const nomP = d.prestaId ? (window.DB.prestataires.find(x => x.id == d.prestaId)||{}).nom||'' : '';
@@ -6758,7 +6618,7 @@ window.renderDocuments = function() {
   }
 
   const _coches = new Set(JSON.parse(JSON.stringify(window.DB.coches&&window.DB.coches.docs||[])));
-  const cols = '36px 46px 130px minmax(0,1fr) 90px 90px 90px 80px 60px 60px 50px 36px';
+  const cols = '36px 46px 130px minmax(0,1fr) 90px 90px 90px 92px 60px 60px 50px 36px';
 
   cont.innerHTML = items.map(d => {
     const presta  = window.getPrestaName(d.prestaId);
@@ -6781,7 +6641,7 @@ window.renderDocuments = function() {
       <span><span class="badge badge-ardoise">${window.escHtml(d.type||'—')}</span></span>
       <span class="text-sm">${window.fmtDate(d.dateDebutContrat) || '—'}</span>
       <span class="text-sm">${window.fmtDate(d.dateFinContrat) || '—'}</span>
-      <span>${d.statut ? window.badgeStatut(d.statut) : '—'}${d.type==='Contrat' && d.dateFinContrat && d.dateFinContrat < window.today() && d.statut!=='Archivé' ? ' <span class="badge badge-jaune" title="Contrat expiré le '+window.fmtDate(d.dateFinContrat)+'">⚠ Expiré</span>' : ''}</span>
+      <span>${d.statut ? window.badgeStatut(d.statut) : '—'}${d.type==='Contrat' && d.dateFinContrat && d.dateFinContrat < window.today() && d.statut!=='Archivé' ? ' <span class="badge badge-jaune" title="Contrat expiré le '+window.fmtDate(d.dateFinContrat)+'">⚠ Expiré</span>' : ''}${d.statut==='Archivé' && d.dateArchivage ? '<br><span class="text-sm text-sec" style="font-size:11px;white-space:nowrap" title="Archivé le '+window.fmtDate(d.dateArchivage)+'">🗄 '+window.fmtDate(d.dateArchivage)+'</span>' : ''}</span>
       <span style="text-align:center">
         ${d.ncId ? `<span class="badge badge-rouge" style="cursor:pointer;font-size:11px"
           onclick="(function(e){e.stopPropagation();window.showModule('nonconformites',document.querySelector('[data-mod=nonconformites]'));setTimeout(function(){window.ouvrirNC(${d.ncId});},100);})(event)"
@@ -6916,7 +6776,10 @@ function _remplirFormDoc(d, opts) {
       ? liees.map(a => `<span class="badge badge-vert" style="cursor:pointer;font-size:11px" title="Ouvrir action ${a.id}" onclick="window.ouvrirAction(${a.id})">A${a.id}</span>`).join('')
       : '';
   }
+  document.getElementById('d-date-archivage').value = d?.dateArchivage || '';
+
   window.majChampsContrat();
+  window.majChampsArchivage(false);
   window.renderLiensDoc();
   if (window._renderLiesCroisesDoc) window._renderLiesCroisesDoc(d);
 }
@@ -6927,6 +6790,28 @@ function _remplirFormDoc(d, opts) {
 window.majChampsContrat = function() {
   const type = document.getElementById('d-type').value;
   document.getElementById('panel-doc-contrat').style.display = type === 'Contrat' ? 'block' : 'none';
+};
+
+// =====================================================
+// DATE D'ARCHIVAGE DOC
+// auto = true  → appel depuis le select statut (changement manuel)
+// auto = false → appel depuis le remplissage du formulaire (ouverture)
+// =====================================================
+window.majChampsArchivage = function(auto) {
+  const grp   = document.getElementById('grp-date-archivage');
+  const champ = document.getElementById('d-date-archivage');
+  const sel   = document.getElementById('d-statut');
+  if (!grp || !champ || !sel) return;
+
+  if (sel.value === 'Archivé') {
+    grp.style.display = 'block';
+    // Inscription automatique de la date du jour au passage sur "Archivé"
+    if (auto && !champ.value) champ.value = window.today();
+  } else {
+    grp.style.display = 'none';
+    // Sortie du statut "Archivé" → la date n'a plus lieu d'être
+    if (auto) champ.value = '';
+  }
 };
 
 // =====================================================
@@ -6992,6 +6877,9 @@ window.saveDocument = function() {
     type,
     date:     document.getElementById('d-date').value,
     statut:   document.getElementById('d-statut').value,
+    dateArchivage: document.getElementById('d-statut').value === 'Archivé'
+                     ? document.getElementById('d-date-archivage').value
+                     : '',
     notes:    document.getElementById('d-notes').value,
     prestaId: pSel  ? parseInt(pSel)  : null,
     liens:    JSON.parse(JSON.stringify(_docLiens)),
@@ -7083,8 +6971,9 @@ window.imprimerSelectionDocs = function() {
       <td style="font-weight:600">${window.escHtml(d.titre||'')}</td>
       <td>${window.escHtml(d.type||'—')}</td>
       <td>${window.escHtml(d.statut||'—')}</td>
+      <td>${(d.statut === 'Archivé' && d.dateArchivage) ? window.fmtDate(d.dateArchivage) : '—'}</td>
     </tr>
-    ${d.notes ? `<tr><td></td><td colspan="4" style="font-size:11px;color:#555;padding:2px 10px 6px">${window.escHtml(d.notes)}</td></tr>` : ''}`;
+    ${d.notes ? `<tr><td></td><td colspan="5" style="font-size:11px;color:#555;padding:2px 10px 6px">${window.escHtml(d.notes)}</td></tr>` : ''}`;
   }).join('');
 
   const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
@@ -7110,7 +6999,7 @@ window.imprimerSelectionDocs = function() {
     </div>
     <h1>Documents (${docs.length})</h1>
     <table>
-      <thead><tr><th>Date</th><th>Prestataire</th><th>Titre</th><th>Type</th><th>Statut</th></tr></thead>
+      <thead><tr><th>Date</th><th>Prestataire</th><th>Titre</th><th>Type</th><th>Statut</th><th>Archivé le</th></tr></thead>
       <tbody>${lignes}</tbody>
     </table>
     <div class="p-footer">
@@ -7199,12 +7088,18 @@ window.saveNC = function(action) {
         </div>
         <div class="form-group" style="margin:0">
           <label>Statut</label>
-          <select id="d-statut"></select>
+          <select id="d-statut" onchange="window.majChampsArchivage(true)"></select>
         </div>
         <div class="form-group" style="margin:0">
           <label>Date enregistrement</label>
           <input type="date" id="d-date">
         </div>
+      </div>
+
+      <!-- Date d'archivage (visible uniquement si statut = Archivé) -->
+      <div class="form-group" id="grp-date-archivage" style="display:none;margin-bottom:14px;max-width:280px">
+        <label style="color:var(--ardoise)">🗄 Date d'archivage</label>
+        <input type="date" id="d-date-archivage" style="background:var(--ardoise-clair);border:2px solid var(--ardoise)">
       </div>
       <div class="form-group" style="margin-bottom:14px">
         <label>Action liée</label>
@@ -7637,97 +7532,6 @@ window.supprimerReunion = function(id) {
     window.renderReunions();
     window.renderDashboard();
   });
-};
-
-// =====================================================
-// FICHE DÉTAIL RÉUNION
-// =====================================================
-window.ouvrirDetailReunion = function(id) {
-  const r = window.DB.reunions.find(x => x.id === id);
-  if (!r) return;
-
-  const acts    = window.DB.actions.filter(a => a.reunionId == id);
-  const actTerm = acts.filter(a => a.statut === 'Terminée').length;
-  const isTenue = r.statut === 'Tenue';
-
-  document.getElementById('detail-r-titre').innerHTML =
-    (isTenue ? 'COMPTE RENDU — ' : 'RÉUNION — ')
-    + '<span style="font-size:15px;font-weight:500;color:var(--texte-sec)">' + window.escHtml(r.titre) + '</span>';
-
-  const presentsHTML = isTenue && r.presents && r.presents.length
-    ? `<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
-        <div style="font-weight:600;font-size:13px;margin-bottom:8px;color:var(--vert-fonce)">
-          👥 Présents (${r.presents.length})</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px">
-          ${r.presents.map(p => `<span class="badge badge-vert">${window.escHtml(p)}</span>`).join('')}
-        </div>
-      </div>` : '';
-
-  const actsHTML = acts.length
-    ? `<div class="liste-container" style="margin-top:6px">
-        <div class="liste-header" style="grid-template-columns:52px 1fr 130px 100px 100px">
-          <span>N°</span><span>Action</span><span>Prestataire</span><span>Échéance</span><span>Statut</span>
-        </div>
-        ${acts.map(a => {
-          const retard = window.isRetard(a.echeance, a.statut);
-          return `<div class="liste-row" style="grid-template-columns:52px 1fr 130px 100px 100px;cursor:pointer"
-            onclick="window.ouvrirAction(${a.id})">
-            <span style="font-family:monospace;font-size:12px;color:var(--texte-sec)">${a.id}</span>
-            <span style="font-weight:600;color:var(--vert-fonce)">${window.escHtml(a.objet)}</span>
-            <span class="text-sm">${window.escHtml(window.getPrestaName(a.prestaId))}</span>
-            <span class="text-sm" style="color:${retard?'var(--rouge)':'inherit'}">${window.fmtDate(a.echeance)}</span>
-            <span>${window.badgeStatut(a.statut)}</span>
-          </div>`;
-        }).join('')}
-      </div>`
-    : '<p class="text-sm text-sec" style="padding:8px 0">Aucune action liée.</p>';
-
-  document.getElementById('detail-r-body').innerHTML = `
-    <table style="width:100%;font-size:13px;margin-bottom:14px">
-      <tr><td style="color:var(--texte-sec);width:100px;padding:4px 0">Date</td>
-          <td><strong>${window.fmtDate(r.date)}</strong>${r.heure ? ' à ' + r.heure.replace(':','h') : ''}</td></tr>
-      ${r.lieu ? `<tr><td style="color:var(--texte-sec);padding:4px 0">Lieu</td><td>${window.escHtml(r.lieu)}</td></tr>` : ''}
-      <tr><td style="color:var(--texte-sec);padding:4px 0">Statut</td><td>${window.badgeStatut(r.statut)}</td></tr>
-      <tr><td style="color:var(--texte-sec);padding:4px 0">Classée</td>
-          <td><label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-            <input type="checkbox" id="chk-classe-${r.id}" ${r.classe?'checked':''}
-              onchange="(function(v){window.DB.reunions.find(x=>x.id==${r.id}).classe=v;window.sauverDB();})(this.checked)"
-              style="width:16px;height:16px;accent-color:var(--rouge)">
-            <span class="text-sm">${r.classe ? 'Oui' : 'Non'}</span>
-          </label></td></tr>
-      ${r.lien ? `<tr><td style="color:var(--texte-sec);padding:4px 0">Lien</td>
-          <td><a href="${window.escHtml(r.lien)}" target="_blank" style="color:var(--bleu)">${window.escHtml(r.lien)}</a></td></tr>` : ''}
-    </table>
-
-    ${r.odj ? `<div style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:13px;color:var(--bleu);margin-bottom:6px">📋 Ordre du jour</div>
-      <div style="white-space:pre-line;font-size:13px;line-height:1.7;padding:10px 14px;background:var(--bleu-clair);border-radius:var(--radius-sm)">${window.escHtml(r.odj)}</div>
-    </div>` : ''}
-
-    ${presentsHTML}
-
-    ${r.cr ? `<div style="margin-bottom:14px">
-      <div style="font-weight:700;font-size:13px;color:var(--vert-fonce);margin-bottom:6px">📝 Compte-rendu</div>
-      <div style="white-space:pre-line;font-size:13px;line-height:1.7;padding:10px 14px;background:var(--vert-clair);border-radius:var(--radius-sm)">${window.escHtml(r.cr)}</div>
-    </div>` : ''}
-
-    <div style="font-weight:700;font-size:13px;color:var(--vert-fonce);margin-bottom:8px">
-      🎯 Actions liées (${acts.length}) — ${actTerm} terminées
-    </div>
-    ${actsHTML}
-    <div style="margin-top:12px">
-      <button class="btn btn-vert btn-sm"
-        onclick="window.fermerDetailReunion();window.ouvrirNouvelleAction({reunionId:${r.id}})">
-        ＋ Ajouter une action
-      </button>
-    </div>
-  `;
-
-  document.getElementById('modal-reunion-detail').classList.add('open');
-};
-
-window.fermerDetailReunion = function() {
-  document.getElementById('modal-reunion-detail').classList.remove('open');
 };
 
 // =====================================================
@@ -8290,7 +8094,6 @@ window.envoyerNotifContacts = function() {
     'Date constat : ' + window.fmtDate(n.date),
     'Gravité : ' + (n.gravite||'—'),
     'Statut : ' + n.statut,
-    n.localisation ? 'Localisation : ' + n.localisation : '',
     '',
     'Merci de bien vouloir prendre les mesures nécessaires.',
     '',
@@ -8321,7 +8124,6 @@ window.envoyerNotifContacts = function() {
       'Date constat : ' + window.fmtDate(n.date),
       'Gravité : ' + (n.gravite||'—'),
       'Statut : ' + n.statut,
-      n.localisation ? 'Localisation : ' + n.localisation : '',
       '',
       'Merci de bien vouloir prendre les mesures nécessaires.',
       '',
@@ -8710,8 +8512,8 @@ window.toggleModulesAvances = function() {
 // ===== Guides (PICS 3) =====
 window.ouvrirGuide = function(module) {
   var titres = {
-    bienvenue:      'Guide PICS',
     demo:           '🎭 Mode Démo',
+    bienvenue:      'Guide PICS',
     dashboard:      '📊 Tableau de bord',
     reunions:       '📅 Réunions',
     actions:        '🎯 Actions',
@@ -9821,7 +9623,7 @@ window._guideContenu = function(module) {
         champs: a => [a.objet, a.responsable, a.notes, a.historique].concat(mailsDe(a)) },
       { ico: '🔧', coul: 'var(--rouge)', items: avance ? db.nonconformites : [],
         lib: n => n.description || 'NC', ouvre: 'ouvrirNC',
-        champs: n => [n.description, n.type, n.localisation, n.causes, n.evaluation, n.reponsePCS, n.notes].concat(mailsDe(n)) },
+        champs: n => [n.description, n.type, n.causes, n.evaluation, n.reponsePCS, n.notes].concat(mailsDe(n)) },
       { ico: '🏢', coul: 'var(--orange)', items: db.prestataires,
         lib: p => p.nom || 'Prestataire', ouvre: 'ouvrirPresta',
         champs: p => [p.nom, p.activites, p.notes, p.adresse].concat(contactsDe(p.id)) },
