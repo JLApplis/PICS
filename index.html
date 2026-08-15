@@ -100,6 +100,16 @@ img{max-width:100%}
 .note-demo-clair{margin-top:10px;font-size:13.5px;color:var(--texte-sec);font-style:italic}
 .avert-save{max-width:660px;margin:24px auto 26px;padding:14px 20px;border-radius:var(--radius);background:#FFF8E8;border:1px solid #E5C97A;font-size:14px;line-height:1.65;color:#6B5410;text-align:left}
 .avert-save strong{color:#5A4409}
+.essai{max-width:720px;margin:26px auto 0;padding:18px 22px;border-radius:var(--radius);
+       background:#F1F7F4;border:1px solid #BFE0D2;text-align:left}
+.essai h3{margin:0 0 8px;font-size:16px;color:#085041}
+.essai p{margin:0 0 10px;font-size:14px;line-height:1.65;color:#2A3B35}
+.essai ol{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.7;color:#2A3B35}
+.essai .fichiers{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.essai .fichiers a{font-size:13px;padding:8px 14px;border-radius:8px;background:#fff;
+       border:1px solid #BFE0D2;color:#085041;text-decoration:none;font-weight:600}
+.essai .fichiers a:hover{background:#E1F5EE}
+.essai .note{font-size:12.5px;color:#5C6B66;margin:10px 0 0}
 .avert-save a{color:#5A4409;font-weight:600}
 .hero-rassure span{display:flex;align-items:center;gap:7px}
 .check{color:#7FE0BE;font-weight:700}
@@ -394,6 +404,30 @@ img{max-width:100%}
       <div class="hero-cta">
         <a href="pics_demo.html" class="btn btn-ligne">▶ Essayer la démo</a>
         <a href="https://github.com/JLApplis/PICS/releases/latest/download/pics.html" class="btn btn-primaire">⬇ Télécharger gratuitement</a>
+      </div>
+
+      <div class="essai">
+        <h3>🎓 Prendre l'outil en main sur un jeu d'essai</h3>
+        <p>La démonstration se regarde ; ces deux fichiers se manipulent. Ils installent dans
+        <em>votre</em> PICS une copropriété fictive complète — la Résidence les Acacias, avec
+        6 prestataires, 5 réunions, 13 actions, 3 non-conformités et 5 documents. Vous pouvez
+        tout modifier, tout supprimer, tout recommencer.</p>
+        <ol>
+          <li>Téléchargez PICS, puis les deux fichiers ci-dessous dans le même dossier</li>
+          <li>Ouvrez PICS, puis <strong>💾 Données → ⬆️ Importer des données (JSON)</strong></li>
+          <li>Choisissez le fichier de données : la copropriété apparaît</li>
+          <li>Pour découvrir le contrôle des comptes du syndic :
+              <strong>💶 Rapprocher les dépenses</strong>, et choisissez le fichier CSV</li>
+        </ol>
+        <div class="fichiers">
+          <a href="https://github.com/JLApplis/PICS/raw/main/formation/PICS_Formation_donnees.json" download>⬇ Jeu de données (JSON)</a>
+          <a href="https://github.com/JLApplis/PICS/raw/main/formation/depenses_en_cours.csv" download>⬇ Exemple de dépenses (CSV)</a>
+        </div>
+        <p class="note"><strong>Si vous utilisez déjà PICS :</strong> l'import <em>remplace</em> vos données.
+        Exportez-les d'abord, ou gardez ce jeu d'essai dans un second fichier PICS, rangé
+        dans un autre dossier — les deux cohabitent sans se mélanger.</p>
+        <p class="note">Le fichier CSV montre aussi <strong>le format attendu</strong> pour vos propres
+        relevés de dépenses : point-virgule comme séparateur, date en première colonne, montant en dernière.</p>
       </div>
       <p class="cta-prix"><strong>Gratuit, sans limite et sans publicité.</strong> Aujourd'hui comme demain.</p>
     </div>
