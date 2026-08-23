@@ -108,7 +108,7 @@ En utilisant PICS, vous reconnaissez avoir pris connaissance de ces informations
 
 ## Versions
 
-La version en cours est **PICS 3.2**. Le numéro est affiché dans l'en-tête de l'application et dans le titre de l'onglet : une simple capture d'écran suffit donc à identifier la version utilisée.
+La version en cours est **PICS 3.3**. Le numéro est affiché dans l'en-tête de l'application et dans le titre de l'onglet : une simple capture d'écran suffit donc à identifier la version utilisée.
 
 **Ce dépôt est la seule source officielle de PICS.** Une copie obtenue ailleurs peut être modifiée, périmée, ou les deux — comparez-la à la [dernière version publiée ici](https://github.com/JLApplis/PICS/releases/latest).
 
