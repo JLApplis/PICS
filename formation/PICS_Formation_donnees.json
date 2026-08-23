@@ -158,7 +158,8 @@
    "date": "2026-02-24",
    "heure": "19:00",
    "lieu": "Domicile de Jean DUPONT",
-   "statut": "Tenue",
+   "statut": "Classée",
+   "dateClassement": "2026-04-02",
    "odj": "1. Relecture des comptes 2025\n2. Points à porter à l'ordre du jour de l'AG\n3. Devis éclairage du hall",
    "cr": "Comptes relus, deux écarts identifiés sur les charges d'ascenseur : demande d'explication adressée au syndic. Trois devis demandés pour l'éclairage du hall. Décision de porter la question des délais d'intervention ascenseur à l'AG.",
    "presents": [
@@ -721,7 +722,7 @@
    "statut": "Ouverte",
    "dateCloture": "",
    "gravite": "Mineure",
-   "echeance": "2026-08-20",
+   "echeance": "2026-07-15",
    "docLie": "",
    "responsable": "Jean DUPONT",
    "dateEnregistrement": "2026-06-05",
@@ -886,6 +887,7 @@
   "statutsReunions": [
    "Planifiée",
    "Tenue",
+   "Classée",
    "Annulée"
   ],
   "statutsDocs": [
